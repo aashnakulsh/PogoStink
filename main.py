@@ -1,5 +1,12 @@
 from cmu_graphics import *
 
+from PIL import Image
+#Python Imaging Library (can use w/o doing tech demo)
+#is how you draw images
+# appimage = Image.open("path to file")
+
+import os, pathlib
+
 def onAppStart(app):
     app.i = app.height//2
     app.color = 'pink'
