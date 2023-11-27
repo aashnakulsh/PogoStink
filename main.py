@@ -33,38 +33,19 @@ def help_onKeyPress(app, key):
 def game_redrawAll(app):
     drawLabel("game screen", app.width//2, app.height//2)
     
-    runChunk(chunk1_1)
-    # for block in chunk1_1['grass']:
-    #     drawRect(
-    #         (app.width - ((block[0])*app.width//app.blockScale)),    #//app.blockScale*(block[0]-1),
-    #         app.height - ((block[1]+1)*app.height//app.blockScale),# (app.blockScale*(block[1]-1)),
-    #         app.width//app.blockScale,
-    #         app.height//app.blockScale,
-    #         fill = 'green'
-    #     )
-
-    # for block in chunk1_1['dirt']:
-    #     drawRect(
-    #         (app.width - ((block[0])*app.width//app.blockScale)),    #//app.blockScale*(block[0]-1),
-    #         app.height - ((block[1]+1)*app.height//app.blockScale),# (app.blockScale*(block[1]-1)),
-    #         app.width//app.blockScale,
-    #         app.height//app.blockScale,
-    #         fill = 'brown'
-    #     )
-    
-    # for block in chunk1_1['platform']:
-    #     drawRect(
-    #         (app.width - ((block[0])*app.width//app.blockScale)),    #//app.blockScale*(block[0]-1),
-    #         app.height - ((block[1]+1)*app.height//app.blockScale),# (app.blockScale*(block[1]-1)),
-    #         app.width//app.blockScale,
-    #         app.height//app.blockScale,
-    #         fill = 'purple'
-    #     )
+    #function to randomly generate chunks 
+    generateChunk(startChunk)
+    # generateChunk(chunk1_1)
 
 def game_onKeyPress(app, key):
     if key == 'w':
         setActiveScreen('welcome')
     if key == 'h':
         setActiveScreen('help')
+
+def game_onStep(app):
+    #change screen every second if character 
+    pass
+
 
 runAppWithScreens(initialScreen='game')

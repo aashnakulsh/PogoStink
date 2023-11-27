@@ -7,21 +7,23 @@ app.blockScale = 15
 
 #each chunk is 15x15
 #chunk for the player to start on
-# startChunk = {'grass': 
-#                 {(x, 2) for x in range(1, 15)},
-#             'dirt': 
-#                     {(x, 1) for x in range(1, 15)} | 
-#                     {(x, 0) for x in range(1, 15)},
-#             'platform':
-#                     {(x, 5) for x in range(2, 4)}}
+startChunk = {
+            'grass': 
+                {(x, 2) for x in range(1, app.blockScale+1)},
+            'dirt': 
+                {(x, 1) for x in range(1, app.blockScale+1)} | 
+                {(x, 0) for x in range(1, app.blockScale+1)}}
 
 #Level 1 chunks (easy)
-chunk1_1 = {'grass': 
+
+#
+chunk1_1 = {
+            'grass': 
                 {(x, 2) for x in range(1, app.blockScale+1)},
-          'dirt': 
+            'dirt': 
                 {(x, 1) for x in range(1, app.blockScale+1)} | 
                 {(x, 0) for x in range(1, app.blockScale+1)},
-          'platform':
+            'platform':
                 {(x, 5) for x in range(2, 4)}}
 
 #Level 2 chunks (medium)
@@ -29,10 +31,7 @@ chunk1_1 = {'grass':
 #Level 3 chunks (hard)
 
 
-
-# print(*chunk1['grass'])
-
-def runChunk(chunk):
+def generateChunk(chunk):
     for blockType in chunk:
         if blockType == 'grass':
             color = 'green'
