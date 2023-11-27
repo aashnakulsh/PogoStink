@@ -17,7 +17,7 @@ startChunk = {
 
 #Level 1 chunks (easy)
 
-#3 block hole w/ platform above
+#3 block hole + platform + ooze monster + life powerup
 chunk1_1 = {
             'grass': 
                 {(x, 2) for x in range(1, 7)} |
@@ -34,6 +34,7 @@ chunk1_1 = {
                 {(14, 3)}
             }
 
+#two 2 block holes + platform + life powerup
 chunk1_2 = {
             'grass': 
                 {(x, 2) for x in range(1, 4)} |
@@ -58,14 +59,42 @@ chunk1_2 = {
                 {(14, 3)}
             }
 
+#one 4 block hole + 1 ooze monster + 2 smog monsters 
 chunk1_3 = {
             'grass': 
-                {(x, 2) for x in range(1, app.blockScale+1)},
+                {(x, 2) for x in range(1, 5)} |
+                {(x, 2) for x in range(9, app.blockScale+1)},
             'dirt': 
-                {(x, 1) for x in range(1, app.blockScale+1)} | 
-                {(x, 0) for x in range(1, app.blockScale+1)}
+                {(x, 1) for x in range(1, 5)} |
+                {(x, 1) for x in range(9, app.blockScale+1)}|
+                {(x, 0) for x in range(1, app.blockScale+1)},
+            'ooze':
+                {(6, 1), (7, 1)},
+            'smog':
+                {(12, 6), (5, 4)}
             }
 
+# one 8 block hole + 1 invincibility powerup + 
+# 4 smog monsters + 1 phoenix + garbage
+chunk1_4 = {
+            'grass': 
+                {(x, 2) for x in range(1, 5)} |
+                {(x, 2) for x in range(14, app.blockScale+1)},
+            'dirt': 
+                {(x, 1) for x in range(1, 5)} |
+                {(x, 1) for x in range(14, app.blockScale+1)} |
+                {(x, 0) for x in range(1, app.blockScale+1)},
+            'invincibility':
+                {(3,3)},
+            'smog':
+                {(6,2), (8, 1), (10, 2)},
+            'ooze':
+                {(12, 1), (13, 1)},
+            'phoenix':
+                {(13, 6)},
+            'platform':
+                {(13, 5)}
+            }
 #Level 2 chunks (medium)
 
 #Level 3 chunks (hard)
