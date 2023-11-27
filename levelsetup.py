@@ -9,7 +9,7 @@ app.blockScale = 15
 #chunk for the player to start on
 startChunk = {
             'grass': 
-                {(x, 2) for x in range(1, app.blockScale+1)},
+                {(x, 2) for x in range(1, app.blockScale)},
             'dirt': 
                 {(x, 1) for x in range(1, app.blockScale+1)} | 
                 {(x, 0) for x in range(1, app.blockScale+1)}}
