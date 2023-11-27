@@ -9,7 +9,7 @@ app.blockScale = 15
 #chunk for the player to start on
 startChunk = {
             'grass': 
-                {(x, 2) for x in range(1, app.blockScale)},
+                {(x, 2) for x in range(1, app.blockScale+1)},
             'dirt': 
                 {(x, 1) for x in range(1, app.blockScale+1)} | 
                 {(x, 0) for x in range(1, app.blockScale+1)}}
@@ -41,7 +41,7 @@ def generateChunk(chunk):
             color = 'purple'
         for (posx, posy) in chunk[blockType]:
             drawRect(
-                (app.width - ((posx)*app.width//app.blockScale)),   
+                (((posx-1)*app.width//app.blockScale)),   
                 app.height - ((posy+1)*app.height//app.blockScale),
                 app.width//app.blockScale,
                 app.height//app.blockScale,

@@ -57,5 +57,4 @@ def game_onStep(app):
     #change screen every second if character 
     pass
 
-
-runAppWithScreens(initialScreen='welcome')
+runAppWithScreens(initialScreen='game')
