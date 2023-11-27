@@ -28,10 +28,17 @@ def help_onKeyPress(app, key):
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
     drawLabel("game screen", app.width//2, app.height//2)
-    for yIndex, rowBlock in enumerate(chunk1):
-        for xIndex, block in enumerate(rowBlock):
-            drawRect(app.width//15, app.height//15, app.width//15*xIndex, 
-                     app.height//15*yIndex, fill='blue')
+    # for yIndex, rowBlock in enumerate(chunk1):
+    #     for xIndex, block in enumerate(rowBlock):
+    #         print(app.width//15)
+    #         drawRect(app.width//15, app.height//15, (app.width//15)*xIndex, (app.height//15)*yIndex, fill='blue')
+
+    for block in chunk1['grass']:
+        # print(app.width//15)
+        # print(app.width//15*block[0], app.height//15*block[1])
+        # drawRect(app.width//15, app.height//15, app.width//15*(block[0]), app.height//15*block[1])
+        # print(block)
+        drawRect(app.width//15*(block[0]-1), app.height-(15*(block[1]-1)), app.width//15, app.height//15)
 
 def game_onKeyPress(app, key):
     if key == 'w':
@@ -39,4 +46,4 @@ def game_onKeyPress(app, key):
     if key == 'h':
         setActiveScreen('help')
 
-runAppWithScreens(initialScreen='welcome')
+runAppWithScreens(initialScreen='game')
