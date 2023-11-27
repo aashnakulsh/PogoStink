@@ -1,5 +1,10 @@
-from powerups import *
+from cmu_graphics import *
 
-print(i)
+def spawnToxicOozeOgers(posx, posy):
+    pass
 
-print("hi")
+def spawnSmog(posx, posy):
+    pass
+
+def spawnPheonix(posx, posy):
+    pass

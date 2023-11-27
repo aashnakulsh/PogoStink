@@ -1,5 +1,8 @@
 from cmu_graphics import *
 from levelsetup import *
+from monsters import *
+from powerups import *
+from charactersetup import *
 
 def onAppStart(app):
     app.color = 'pink'
@@ -33,12 +36,12 @@ def game_redrawAll(app):
     #         print(app.width//15)
     #         drawRect(app.width//15, app.height//15, (app.width//15)*xIndex, (app.height//15)*yIndex, fill='blue')
 
-    for block in chunk1['grass']:
+    for block in chunk1_1['grass']:
         # print(app.width//15)
         # print(app.width//15*block[0], app.height//15*block[1])
         # drawRect(app.width//15, app.height//15, app.width//15*(block[0]), app.height//15*block[1])
         # print(block)
-        drawRect(app.width//15*(block[0]-1), app.height-(15*(block[1]-1)), app.width//15, app.height//15)
+        drawRect(app.width//15*(block[0]-1), app.height-(15*(block[1]-1)), app.width//15, app.height//15, fill = 'green')
 
 def game_onKeyPress(app, key):
     if key == 'w':
