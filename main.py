@@ -6,6 +6,7 @@ from charactersetup import *
 
 def onAppStart(app):
     app.color = 'pink'
+    # app.blockScale = 10
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~
 def welcome_redrawAll(app):
@@ -31,17 +32,34 @@ def help_onKeyPress(app, key):
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
     drawLabel("game screen", app.width//2, app.height//2)
-    # for yIndex, rowBlock in enumerate(chunk1):
-    #     for xIndex, block in enumerate(rowBlock):
-    #         print(app.width//15)
-    #         drawRect(app.width//15, app.height//15, (app.width//15)*xIndex, (app.height//15)*yIndex, fill='blue')
+    
+    runChunk(chunk1_1)
+    # for block in chunk1_1['grass']:
+    #     drawRect(
+    #         (app.width - ((block[0])*app.width//app.blockScale)),    #//app.blockScale*(block[0]-1),
+    #         app.height - ((block[1]+1)*app.height//app.blockScale),# (app.blockScale*(block[1]-1)),
+    #         app.width//app.blockScale,
+    #         app.height//app.blockScale,
+    #         fill = 'green'
+    #     )
 
-    for block in chunk1_1['grass']:
-        # print(app.width//15)
-        # print(app.width//15*block[0], app.height//15*block[1])
-        # drawRect(app.width//15, app.height//15, app.width//15*(block[0]), app.height//15*block[1])
-        # print(block)
-        drawRect(app.width//15*(block[0]-1), app.height-(15*(block[1]-1)), app.width//15, app.height//15, fill = 'green')
+    # for block in chunk1_1['dirt']:
+    #     drawRect(
+    #         (app.width - ((block[0])*app.width//app.blockScale)),    #//app.blockScale*(block[0]-1),
+    #         app.height - ((block[1]+1)*app.height//app.blockScale),# (app.blockScale*(block[1]-1)),
+    #         app.width//app.blockScale,
+    #         app.height//app.blockScale,
+    #         fill = 'brown'
+    #     )
+    
+    # for block in chunk1_1['platform']:
+    #     drawRect(
+    #         (app.width - ((block[0])*app.width//app.blockScale)),    #//app.blockScale*(block[0]-1),
+    #         app.height - ((block[1]+1)*app.height//app.blockScale),# (app.blockScale*(block[1]-1)),
+    #         app.width//app.blockScale,
+    #         app.height//app.blockScale,
+    #         fill = 'purple'
+    #     )
 
 def game_onKeyPress(app, key):
     if key == 'w':
