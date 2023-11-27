@@ -1,11 +1,5 @@
 from cmu_graphics import *
 
-def energyPowerup(posx, posy):
-    pass
-
-def spawnEnergyPowerup(posx, posy):
-    pass
-
 def invincibilityPowerup(posx, posy):
     pass
 

@@ -6,6 +6,7 @@ from charactersetup import *
 
 def onAppStart(app):
     app.color = 'pink'
+    app.lives = 3
     # app.blockScale = 10
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~
@@ -41,11 +42,11 @@ def help_onKeyPress(app, key):
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
+    drawLabel(f"Life counter: {app.lives}", 50, 50)
     drawLabel("game screen", app.width//2, app.height//2)
     
     #function to randomly generate chunks 
-    generateChunk(startChunk)
-    # generateChunk(chunk1_1)
+    generateChunk(chunk1_3)
 
 def game_onKeyPress(app, key):
     if key == 'w':
