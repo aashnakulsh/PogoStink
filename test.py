@@ -11,5 +11,7 @@ def onAppStart(app):
 
 def redrawAll(app):
     app.text.draw(app)
+def onKeyPress(app, key):
+    print(key)
 
 runApp()
