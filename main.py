@@ -46,7 +46,7 @@ def game_redrawAll(app):
     drawLabel("game screen", app.width//2, app.height//2)
     
     #function to randomly generate chunks 
-    generateChunk(chunk1_4)
+    generateChunk(chunk2_3)
 
 def game_onKeyPress(app, key):
     if key == 'w':

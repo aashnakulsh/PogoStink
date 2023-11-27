@@ -95,9 +95,93 @@ chunk1_4 = {
             'platform':
                 {(13, 5)}
             }
+
 #Level 2 chunks (medium)
 
+#two 2 block holes + platform + smog monster
+chunk2_1 = {
+            'grass': 
+                {(x, 2) for x in range(1, 4)} |
+                {(x, 2) for x in range(6, 10)} |
+                {(x, 2) for x in range (12, app.blockScale+1)},
+            'dirt': 
+                {(x, 1) for x in range(1, 4)} |
+                {(x, 1) for x in range(6, 10)} |
+                {(x, 1) for x in range (12, app.blockScale+1)} |
+                {(x, 0) for x in range(1, 4)} |
+                {(x, 0) for x in range(6, 10)} |
+                {(x, 0) for x in range (12, app.blockScale+1)},
+            'platform':
+                {(x, 5) for x in range(4, 6)} |
+                {(x, 5) for x in range (10, 12)},
+            'garbage':
+                {(x, 1) for x in range(4, 6)} |
+                {(x, 1) for x in range (10, 12)} |
+                {(x, 0) for x in range(4, 6)} |
+                {(x, 0) for x in range (10, 12)},
+            'smog':
+                {(10, 6)}
+            }
+
+#two 2 block holes + platform + life powerup
+chunk2_2 = {
+            'grass': 
+                {(x, 2) for x in range(1, 5)} |
+                {(x, 2) for x in range(7, 10)} |
+                {(x, 2) for x in range (12, app.blockScale+1)},
+            'dirt': 
+                {(x, 1) for x in range(1, 5)} |
+                {(x, 1) for x in range(7, 10)} |
+                {(x, 1) for x in range (12, app.blockScale+1)} |
+                {(x, 0) for x in range(1, 5)} |
+                {(x, 0) for x in range(7, 10)} |
+                {(x, 0) for x in range (12, app.blockScale+1)},
+            'platform':
+                {(x, 5) for x in range(5, 7)} |
+                {(x, 5) for x in range (10, 12)},
+            'garbage':
+                {(x, 1) for x in range(5, 7)} |
+                {(x, 1) for x in range (10, 12)} |
+                {(x, 0) for x in range(5, 7)} |
+                {(x, 0) for x in range (10, 12)},
+            'life':
+                {(14, 3)}
+            }
+
+#two 2 block holes + platform + life powerup
+chunk2_3 = {
+            'grass': 
+                {(x, 2) for x in range(1, 5)} |
+                {(x, 2) for x in range(7, 10)} |
+                {(x, 2) for x in range (12, app.blockScale+1)},
+            'dirt': 
+                {(x, 1) for x in range(1, 5)} |
+                {(x, 1) for x in range(7, 10)} |
+                {(x, 1) for x in range (12, app.blockScale+1)} |
+                {(x, 0) for x in range(1, 5)} |
+                {(x, 0) for x in range(7, 10)} |
+                {(x, 0) for x in range (12, app.blockScale+1)},
+            'platform':
+                {(x, 5) for x in range(5, 7)} |
+                {(x, 5) for x in range (10, 12)},
+            'garbage':
+                {(x, 1) for x in range(5, 7)} |
+                {(x, 1) for x in range (10, 12)} |
+                {(x, 0) for x in range(5, 7)} |
+                {(x, 0) for x in range (10, 12)},
+            'life':
+                {(x*2, 8) for x in range(2, 9)} |
+                {(x*2-1, 10) for x in range(3, 8)}
+            }
+
+
 #Level 3 chunks (hard)
+
+
+#Dict of chunks by level and total
+level1Chunks = {chunk1_1, chunk1_2, chunk1_3, chunk1_4}
+level2Chunks = {chunk2_1, chunk2_2, chunk2_3, chunk2_4}
+level3Chunks = {chunk3_1, chunk3_2, chunk3_3, chunk3_4}
 
 
 def generateChunk(chunk):
