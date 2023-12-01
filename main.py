@@ -6,8 +6,7 @@ from charactersetup import *
 
 def onAppStart(app):
     app.color = 'pink'
-    app.lives = 3
-    # app.blockScale = 10
+    app.gravity = 1
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~
 def welcome_redrawAll(app):
@@ -46,7 +45,7 @@ def game_redrawAll(app):
     drawLabel("game screen", app.width//2, app.height//2)
     
     #function to randomly generate chunks 
-    generateChunk(chunk3_4)
+    generateChunk(chunk3_2)
 
 def game_onKeyPress(app, key):
     if key == 'w':
@@ -58,4 +57,4 @@ def game_onStep(app):
     #change screen every second if character 
     pass
 
-runAppWithScreens(initialScreen='game')
+runAppWithScreens(width = 1200, height = 1200, initialScreen='welcome')
