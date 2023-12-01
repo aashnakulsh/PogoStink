@@ -9,6 +9,10 @@ from PIL import Image, ImageDraw
 def onAppStart(app):
     app.lives = 3
     app.gravity = 1
+    app.currentTime = 0
+    # app.heldTime = 0
+    app.runClock = False
+
     
     app.player = Player(100, 50)
 
@@ -18,9 +22,11 @@ def game_redrawAll(app):
     drawLabel("game screen", app.width//2, app.height//2)
     
     #function to randomly generate chunks 
-    generateChunk(startChunk)
+    generateChunk(chunk1_3)
 
     app.player.draw()
+
+
     
 
 def game_onKeyPress(app, key):
@@ -31,6 +37,7 @@ def game_onKeyPress(app, key):
     if key == 'space':
         app.player.jumpOnPogoStick()
 
+
     #TEMP: get top block
     if key == 'p':
         print(getBlockTypeforXPos(app.player.getPlayerBlock(), startChunk))
@@ -40,10 +47,21 @@ def game_onKeyHold(app, key):
         app.player.rotate(3)
     if 'left' in key:
         app.player.rotate(-3)
+#     if 'space' in key:
+#         app.runClock = True
+
+# def game_onKeyRelease(app, key):
+#     if key == 'space':
+#         app.player.jumpOnPogoStick()
+#         app.runClock = False
+
 
 
 def game_onStep(app):
     app.player.step()
+    # app.currentTime += .1
+    if app.runClock == True:
+        app.currentTime +=.1
 
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~

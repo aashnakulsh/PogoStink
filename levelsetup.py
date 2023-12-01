@@ -1,7 +1,7 @@
 from cmu_graphics import *
 
 #defining levelsetup-related variables
-app.blockScale = 15
+app.blockScale = 20
 
 # chunkList = [startChunk, chunk1_1]
 
@@ -331,7 +331,18 @@ def generateChunk(chunk):
                 border = 'black'
             )
 
-#returns block-type of topmost block (from a chunk) given an x-coordinate
-def getBlockTypeforXPos(xblock, chunk):
-    for i in range(0, app.blockScale):
-        print(i)
+#returns y coord for grass given x coord
+def getBlockTypeforXPos(coordinateX, chunk):
+    # for i in range(0, app.blockScale):
+    #     print(i)
+    coordinateY = -1
+    for (xpos, ypos) in chunk['grass']:
+        if xpos == coordinateX:
+            coordinateY =  ypos
+
+    #no grass block was found
+    for (xpos, ypos) in chunk['dirt']:
+        if xpos == coordinateX and coordinateY == -1:
+            coordinateY = ypos
+
+    return coordinateY
