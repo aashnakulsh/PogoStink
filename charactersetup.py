@@ -25,13 +25,17 @@ class Player():
         self.velocityY = 0 # Upwards velocity
         self.gravity = .5
 
+        self.width = 25
+        self.height = 50
         #from F23_Demos for images (makeNewImages.py)
         backgroundColor = (0, 255, 255) # cyan
-        self.image = Image.new('RGB', (25, 50), backgroundColor)
+        self.image = Image.new('RGB', (self.width, self.height), 
+                               backgroundColor)
 
     def draw(self):
         #from F23_Demos for images (makeNewImages.py)
-        drawImage(CMUImage(self.image), self.posx, self.posy)
+        drawImage(CMUImage(self.image), self.posx, self.posy, 
+                  rotateAngle = self.degrees)
 
     def jumpOnPogoStick(self):
         jumpHeight = -30
@@ -54,9 +58,6 @@ class Player():
             app.player.degrees += deg
 
         print(app.player.degrees)
-
-        #rotate character image
-        self.image = self.image.rotate(360-app.player.degrees)
 
 
     def getPlayerBlock(self):

@@ -37,11 +37,6 @@ def game_onKeyHold(app, key):
     if 'left' in key:
         app.player.rotate(-3)
 
-# def game_onKeyRelease(app, key):
-#     if key == 'right':
-#         app.player.rotate(10)
-
-
 
 def game_onStep(app):
     app.player.step()
