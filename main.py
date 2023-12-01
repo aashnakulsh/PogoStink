@@ -31,6 +31,10 @@ def game_onKeyPress(app, key):
     if key == 'space':
         app.player.jumpOnPogoStick()
 
+    #TEMP: get top block
+    if key == 'p':
+        print(getBlockTypeforXPos(app.player.getPlayerBlock(), startChunk))
+
 def game_onKeyHold(app, key):
     if 'right' in key:
         app.player.rotate(3)

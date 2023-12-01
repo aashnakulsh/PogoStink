@@ -330,3 +330,8 @@ def generateChunk(chunk):
                 fill = color,
                 border = 'black'
             )
+
+#returns block-type of topmost block (from a chunk) given an x-coordinate
+def getBlockTypeforXPos(xblock, chunk):
+    for i in range(0, app.blockScale):
+        print(i)
