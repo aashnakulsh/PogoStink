@@ -3,10 +3,49 @@ from levelsetup import *
 from monsters import *
 from powerups import *
 from charactersetup import *
+from PIL import Image, ImageDraw
+
 
 def onAppStart(app):
-    app.color = 'pink'
+    app.lives = 3
     app.gravity = 1
+    
+    app.player = Player(100, 50)
+
+#~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
+def game_redrawAll(app):
+    drawLabel(f"Life counter: {app.lives}", 50, 50)
+    drawLabel("game screen", app.width//2, app.height//2)
+    
+    #function to randomly generate chunks 
+    generateChunk(startChunk)
+
+    app.player.draw()
+    
+
+def game_onKeyPress(app, key):
+    if key == 'w':
+        setActiveScreen('welcome')
+    if key == 'h':
+        setActiveScreen('help')
+    if key == 'space':
+        app.player.jumpOnPogoStick()
+
+def game_onKeyHold(app, key):
+    if 'right' in key:
+        app.player.rotate(3)
+    if 'left' in key:
+        app.player.rotate(-3)
+
+# def game_onKeyRelease(app, key):
+#     if key == 'right':
+#         app.player.rotate(10)
+
+
+
+def game_onStep(app):
+    app.player.step()
+
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~
 def welcome_redrawAll(app):
@@ -39,22 +78,5 @@ def help_onKeyPress(app, key):
     if key == 'w' or key == 'left':
         setActiveScreen('welcome')
 
-#~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
-def game_redrawAll(app):
-    drawLabel(f"Life counter: {app.lives}", 50, 50)
-    drawLabel("game screen", app.width//2, app.height//2)
-    
-    #function to randomly generate chunks 
-    generateChunk(chunk3_2)
 
-def game_onKeyPress(app, key):
-    if key == 'w':
-        setActiveScreen('welcome')
-    if key == 'h':
-        setActiveScreen('help')
-
-def game_onStep(app):
-    #change screen every second if character 
-    pass
-
-runAppWithScreens(width = 1200, height = 1200, initialScreen='welcome')
+runAppWithScreens(width = 1200, height = 1200, initialScreen='game')

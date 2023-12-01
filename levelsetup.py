@@ -327,5 +327,6 @@ def generateChunk(chunk):
                 app.height - ((posy+1)*app.height//app.blockScale),
                 app.width//app.blockScale,
                 app.height//app.blockScale,
-                fill = color
+                fill = color,
+                border = 'black'
             )
