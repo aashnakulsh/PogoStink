@@ -2,7 +2,7 @@ from cmu_graphics import *
 from levelsetup2 import *
 from monsters import *
 from powerups import *
-from charactersetup import *
+from charactersetup2 import *
 from PIL import Image, ImageDraw
 
 #TODO: collision, change rotate so that ypos and xpos are changed!!, player movement
@@ -12,15 +12,12 @@ def onAppStart(app):
     # print(createRandomHoles(app.chunk))
     print(getGroundHeightIndex(app.chunk))
     print(getGroundHeightPixels(app.chunk))
-    app.player = Player(50, 50)
+    app.player = Player(app.width//2, 50)
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
-    
-    #function to randomly generate chunks 
-    generateChunk(app.chunk)
-
     app.player.draw()
+    generateChunk(app.chunk)
 
 
 def game_onKeyPress(app, key):
@@ -30,6 +27,7 @@ def game_onKeyPress(app, key):
         setActiveScreen('help')
     if key == 'space':
         app.player.jumpOnPogoStick()
+        print("ok")
 
 def game_onKeyHold(app, key):
     if 'right' in key:
