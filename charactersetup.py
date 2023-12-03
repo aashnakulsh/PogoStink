@@ -7,7 +7,7 @@ import math
 class Player():
     def __init__(self, posxTL, posyTL):
         self.lives = 3
-        self.width = 25
+        self.width = 50
         self.height = 50
 
         #POSITIONS
@@ -81,6 +81,7 @@ class Player():
             self.velocityY = -10
         self.posyTL += self.velocityY
 
+        #TODO: using collision function, check how much player goes through ground by then adjust player pos accordingly (subtract)
         #TODO: add thing ot make sure character stays within bounds
       
 

@@ -5,13 +5,9 @@ from powerups import *
 from charactersetup import *
 from PIL import Image, ImageDraw
 
-
+#TODO: collision, change rotate so that ypos and xpos are changed!!, player movement
 def onAppStart(app):
-    # app.lives = 3
     app.gravity = 1
-    # app.currentTime = 0
-    # app.heldTime = 0
-    # app.runClock = False
     app.chunk = defaultChunk1
     # print(createRandomHoles(app.chunk))
     print(getGroundHeightIndex(app.chunk))
@@ -35,38 +31,19 @@ def game_onKeyPress(app, key):
     if key == 'space':
         app.player.jumpOnPogoStick()
 
-
-    #TEMP: get top block
-    # if key == 'p':
-        # print(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk))
-        # print((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
-        # print(app.blockHeight*(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
-        # print(app.height - ((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1)*app.height//app.blockScale))
-
 def game_onKeyHold(app, key):
     if 'right' in key:
         app.player.rotate(3)
     if 'left' in key:
         app.player.rotate(-3)
-#     if 'space' in key:
-#         app.runClock = True
-
-# def game_onKeyRelease(app, key):
-#     if key == 'space':
-#         app.player.jumpOnPogoStick()
-#         app.runClock = False
+    if 'y' in key:
+        print(app.player.posyTL)
 
 
 
 def game_onStep(app):
-    # groundHeight = app.height - (app.blockHeight*(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
-    # groundHeight = -10-app.player.height + app.height - ((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1)*app.height//app.blockScale)
-    # app.player.step(groundHeight)
     #CHANGE MOVEMETN TO BE COLLISION BASED
     app.player.step()
-    # app.currentTime += .1
-    # if app.runClock == True:
-    #     app.currentTime +=.1
 
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~
