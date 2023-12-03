@@ -27,6 +27,9 @@ class Block:
         self.posxBR = self.posxTL + app.blockLength
         self.posyBR = self.posyTL + app.blockLength
 
+        self.centerX = int(self.posxTL + (0.5*app.blockLength))
+        self.centerY = int(self.posyTL + (0.5*app.blockLength))
+
         #Assign blockType attributes
         #blocks
         if self.blockType == 'grass':

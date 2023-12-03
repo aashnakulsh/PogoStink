@@ -23,6 +23,9 @@ class Player():
         self.posxBR = self.posxTL + self.width
         self.posyBR = self.posyTL + self.height
 
+        self.centerX = self.posxTL + (0.5*self.width)
+        self.centerY = self.posyTL + (0.5*self.height)
+
         self.degrees = 0
 
         self.velocityX = 0 # Horizontal velocity
@@ -38,7 +41,7 @@ class Player():
 
     def draw(self):
         #from F23_Demos for images (makeNewImages.py)
-        drawImage(CMUImage(self.image), self.posxTL, self.posyTL, 
+        drawImage(CMUImage(self.image), self.centerX, self.centerY, 
                   rotateAngle = self.degrees)
 
     
@@ -48,10 +51,7 @@ class Player():
         #give player 30 pixels (between ground and player bottom) 
         # of room to press space in
         if getGroundHeightPixels(app.chunk) - self.posyTL < 30:
-            # print(575 - self.posyTL)
-            # self.posyTL += jumpHeight
-            # dx, dy = calculateProjectileMotion(45, -20, app.currentTime)
-            # app.heldTime = 0
+
             self.posyTL += jumpHeight*math.cos(math.radians(self.degrees))
             self.posxTL -= jumpHeight*math.sin(math.radians(self.degrees))
             self.velocityY = -15 # Set initial upwards velocity
@@ -60,21 +60,14 @@ class Player():
             # self.posxTL -= dx
             # self.posy += dy
 
-            app.currentTime = 0
+            # app.currentTime = 0
 
-
-    def rotate(self, deg):
-        if ((-90 < app.player.degrees < 90) or
-            (app.player.degrees == 90 and deg < 0) or
-            (app.player.degrees == -90 and deg > 0)):
-            app.player.degrees += deg
-    
     def step(self):
         for block in app.chunk:
             if isCollided(self, block):
                 print("k")
 
-        self.velocityY += self.gravity
+        # self.velocityY += self.gravity
         
         # If the character has hit the ground, then rebound bounce
         if self.posyTL >= getGroundHeightPixels(app.chunk):
@@ -84,6 +77,25 @@ class Player():
         #TODO: using collision function, check how much player goes through ground by then adjust player pos accordingly (subtract)
         #TODO: add thing ot make sure character stays within bounds
       
+    @staticmethod
+    def findRotatedCoords(posx, posy, cx, cy, angle):
+        xcoord = (posx-cx) * math.cos(math.radians(angle))- (posy-cy)*math.sin(math.radians(angle)) + cx
+        ycoord = (posy-cy) * math.sin(math.radians(angle))+ (posy-cy)*math.cos(math.radians(angle)) + cy
+        return xcoord, ycoord
+    
+    def rotate(self, deg):
+        #update player appearance
+        if ((-90 < app.player.degrees < 90) or
+            (app.player.degrees == 90 and deg < 0) or
+            (app.player.degrees == -90 and deg > 0)):
+            app.player.degrees += deg
+
+            #update player corner coordinates (positions)
+            self.posxTL, self.posyTL = Player.findRotatedCoords(self.posxTL, self.posyTL, self.centerX, self.centerY, deg)
+            self.posxBL, self.posyBL = Player.findRotatedCoords(self.posxBL, self.posxBL, self.centerX, self.centerY, deg)
+            self.posxBR, self.posyBR = Player.findRotatedCoords(self.posxBR, self.posxBR, self.centerX, self.centerY, deg)
+            self.posxTR, self.posyTR = Player.findRotatedCoords(self.posxTR, self.posyTR, self.centerX, self.centerY, deg)
+        
 
 
 #Calculates change in x and y, given an angle, initial velocity, and time
