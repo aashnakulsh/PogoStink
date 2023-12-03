@@ -12,9 +12,14 @@ def onAppStart(app):
     app.currentTime = 0
     # app.heldTime = 0
     app.runClock = False
+    app.chunk = chunk1_3
+
+    app.blockHeight = app.height/app.blockScale
+    app.blockWidth = app.width/app.blockScale
+    print(app.blockHeight)
 
     
-    app.player = Player(100, 50)
+    app.player = Player(50, 50)
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
@@ -22,12 +27,10 @@ def game_redrawAll(app):
     drawLabel("game screen", app.width//2, app.height//2)
     
     #function to randomly generate chunks 
-    generateChunk(chunk1_3)
+    generateChunk(app.chunk)
 
     app.player.draw()
 
-
-    
 
 def game_onKeyPress(app, key):
     if key == 'w':
@@ -40,7 +43,10 @@ def game_onKeyPress(app, key):
 
     #TEMP: get top block
     if key == 'p':
-        print(getBlockTypeforXPos(app.player.getPlayerBlock(), startChunk))
+        # print(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk))
+        # print((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
+        # print(app.blockHeight*(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
+        print(app.height - ((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1)*app.height//app.blockScale))
 
 def game_onKeyHold(app, key):
     if 'right' in key:
@@ -58,6 +64,10 @@ def game_onKeyHold(app, key):
 
 
 def game_onStep(app):
+    # groundHeight = app.height - (app.blockHeight*(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
+    # groundHeight = -10-app.player.height + app.height - ((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1)*app.height//app.blockScale)
+    # app.player.step(groundHeight)
+    #CHANGE MOVEMETN TO BE COLLISION BASED
     app.player.step()
     # app.currentTime += .1
     if app.runClock == True:
