@@ -1,5 +1,6 @@
 from cmu_graphics import *
 import math
+import random
 
 app.width = 1450
 app.height = 800
@@ -18,7 +19,7 @@ class Block:
         self.posyTL = app.height - (self.yIndex+1)*app.blockLength
 
         self.posxTR = self.posxTL + app.blockLength
-        self.posyTR = self.posxTL
+        self.posyTR = self.posyTL
 
         self.posxBL = self.posxTL
         self.posyBL = self.posyTL + app.blockLength
@@ -55,13 +56,24 @@ def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
         row.add(Block(x, yIndex, blockType))
     return row
 
-startChunk = (
+def generateChunk(chunk):
+    for block in chunk:
+        drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
+                 fill = block.color, border = 'black')
+
+defaultChunk1 = (
             createBlockRow(0, app.totalBlocksInRow, 3, 'grass') |
             createBlockRow(0, app.totalBlocksInRow, 2, 'dirt') |
             createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
             createBlockRow(0, app.totalBlocksInRow, 0, 'dirt')) 
 
-def generateChunk(chunk):
+def getGroundHeightIndex(chunk):
     for block in chunk:
-        drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
-                 fill = block.color, border = 'black')
+        if block.blockType == 'grass':
+            return block.yIndex
+
+
+def createRandomHoles(chunk):
+    holeLength = random.randint(0, app.totalBlocksInRow-1)
+    holeHeight = random.randint(0, getGroundHeightIndex(chunk))
+    return holeLength, holeHeight

@@ -12,7 +12,8 @@ def onAppStart(app):
     # app.currentTime = 0
     # app.heldTime = 0
     # app.runClock = False
-    app.chunk = startChunk
+    app.chunk = defaultChunk1
+    print(createRandomHoles(app.chunk))
 
     app.player = Player(50, 50)
 

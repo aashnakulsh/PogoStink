@@ -15,7 +15,7 @@ class Player():
         self.posyTL = posyTL
 
         self.posxTR = self.posxTL + self.width
-        self.posyTR = self.posxTL
+        self.posyTR = self.posyTL
 
         self.posxBL = self.posxTL
         self.posyBL = self.posyTL + self.height
@@ -69,6 +69,12 @@ class Player():
             app.player.degrees += deg
     
     def step(self):
+
+        for block in app.chunk:
+
+            if isCollided(self, block):
+                print("k")
+
         self.velocityY += self.gravity
         #TODO: magic #  575 = top of green block (modify this after random 
         #                     chunk generation)
@@ -78,9 +84,7 @@ class Player():
             self.velocityY = -10
         self.posyTL += self.velocityY
             
-        for block in app.chunk:
-            if isCollided(block, self):
-                print("k")
+        
             # else:
             #     print('aohgwaighe')
 
@@ -117,17 +121,10 @@ def stopClock(currentTime):
 
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(block, player):
-    # print(player.posxBR, player.posyBR)
-    # print(block.posxBR, block.posxBR)
-    
+    print(player.posxBR >= block.posxTL)
     if ((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
         (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL)):
         return True
     else:
         return False
-    # if ((right2 >= left1) and (right1 >= left2) and
-    #     (bottom2 >= top1) and (bottom1 >= top2)):
-    #     return True
-    # else:
-    #     return False
     
