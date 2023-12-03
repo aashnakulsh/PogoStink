@@ -1,5 +1,5 @@
 from cmu_graphics import *
-from levelsetup import *
+from levelsetup2 import *
 from monsters import *
 from powerups import *
 from charactersetup import *
@@ -7,24 +7,24 @@ from PIL import Image, ImageDraw
 
 
 def onAppStart(app):
-    app.lives = 3
+    # app.lives = 3
     app.gravity = 1
-    app.currentTime = 0
+    # app.currentTime = 0
     # app.heldTime = 0
-    app.runClock = False
-    app.chunk = chunk1_3
+    # app.runClock = False
+    app.chunk = startChunk
 
-    app.blockHeight = app.height/app.blockScale
-    app.blockWidth = app.width/app.blockScale
-    print(app.blockHeight)
+
+
+    # app.blockHeight = app.height/app.blockScale
+    # app.blockWidth = app.width/app.blockScale
+    # print(app.blockHeight)
 
     
     app.player = Player(50, 50)
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
-    drawLabel(f"Life counter: {app.lives}", 50, 50)
-    drawLabel("game screen", app.width//2, app.height//2)
     
     #function to randomly generate chunks 
     generateChunk(app.chunk)
@@ -42,11 +42,11 @@ def game_onKeyPress(app, key):
 
 
     #TEMP: get top block
-    if key == 'p':
+    # if key == 'p':
         # print(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk))
         # print((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
         # print(app.blockHeight*(getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1))
-        print(app.height - ((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1)*app.height//app.blockScale))
+        # print(app.height - ((getYCoordforXCoord(app.player.getPlayerBlock(), app.chunk)+1)*app.height//app.blockScale))
 
 def game_onKeyHold(app, key):
     if 'right' in key:
@@ -70,8 +70,8 @@ def game_onStep(app):
     #CHANGE MOVEMETN TO BE COLLISION BASED
     app.player.step()
     # app.currentTime += .1
-    if app.runClock == True:
-        app.currentTime +=.1
+    # if app.runClock == True:
+    #     app.currentTime +=.1
 
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~
@@ -106,4 +106,4 @@ def help_onKeyPress(app, key):
         setActiveScreen('welcome')
 
 
-runAppWithScreens(width = 1200, height = 1200, initialScreen='game')
+runAppWithScreens(width = app.width, height = app.height, initialScreen='game')
