@@ -72,6 +72,10 @@ def getGroundHeightIndex(chunk):
         if block.blockType == 'grass':
             return block.yIndex
 
+def getGroundHeightPixels(chunk):
+    for block in chunk:
+        if block.blockType == 'grass':
+            return block.posyTL-app.blockLength
 
 def createRandomHoles(chunk):
     holeLength = random.randint(0, app.totalBlocksInRow-1)

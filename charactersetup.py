@@ -45,8 +45,9 @@ class Player():
     def jumpOnPogoStick(self):
         jumpHeight = -30
 
-        #SUPPOSE TILTED BY 5 DEGREES
-        if 575 - self.posyTL < 30:
+        #give player 30 pixels (between ground and player bottom) 
+        # of room to press space in
+        if getGroundHeightPixels(app.chunk) - self.posyTL < 30:
             # print(575 - self.posyTL)
             # self.posyTL += jumpHeight
             # dx, dy = calculateProjectileMotion(45, -20, app.currentTime)
@@ -69,25 +70,16 @@ class Player():
             app.player.degrees += deg
     
     def step(self):
-
         for block in app.chunk:
-
             if isCollided(self, block):
                 print("k")
 
         self.velocityY += self.gravity
-        #TODO: magic #  575 = top of green block (modify this after random 
-        #                     chunk generation)
         
         # If the character has hit the ground, then rebound bounce
-        if self.posyTL >= 575:
+        if self.posyTL >= getGroundHeightPixels(app.chunk):
             self.velocityY = -10
         self.posyTL += self.velocityY
-            
-        
-            # else:
-            #     print('aohgwaighe')
-
 
         #TODO: add thing ot make sure character stays within bounds
       
@@ -121,7 +113,12 @@ def stopClock(currentTime):
 
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(block, player):
-    print(player.posxBR >= block.posxTL)
+    # print(f'1: {player.posxBR >= block.posxTL}')
+    # print(f'2: {block.posxBR >= player.posxTL}')
+    # print(f'3: {player.posyBR >= block.posyTL}')
+    # print(f'4: {block.posyBR >= player.posyTL}')
+    # print((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
+    #     (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL))
     if ((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
         (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL)):
         return True

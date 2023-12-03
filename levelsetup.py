@@ -333,16 +333,11 @@ def generateChunk(chunk):
 
 #returns y coord for grass given x coord
 def getYCoordforXCoord(coordinateX, chunk):
-    # for i in range(0, app.blockScale):
-    #     print(i)
     coordinateY = -1
-    # print(coordinateX)
-    # print(f'1st {coordinateY}')
     for (xpos, ypos) in chunk['grass']:
-        # print(xpos, ypos)
         if xpos == coordinateX:
             coordinateY =  ypos
-    # print(f'2nd {coordinateY}')
+            
     #no grass block was found
     for (xpos, ypos) in chunk['dirt']:
         if xpos == coordinateX and coordinateY == -1:

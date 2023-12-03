@@ -13,8 +13,9 @@ def onAppStart(app):
     # app.heldTime = 0
     # app.runClock = False
     app.chunk = defaultChunk1
-    print(createRandomHoles(app.chunk))
-
+    # print(createRandomHoles(app.chunk))
+    print(getGroundHeightIndex(app.chunk))
+    print(getGroundHeightPixels(app.chunk))
     app.player = Player(50, 50)
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
