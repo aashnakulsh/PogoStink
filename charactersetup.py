@@ -50,7 +50,7 @@ class Player():
             # self.posyTL += jumpHeight
             # dx, dy = calculateProjectileMotion(45, -20, app.currentTime)
             # app.heldTime = 0
-            self.posy += jumpHeight*math.cos(math.radians(self.degrees))
+            self.posyTL += jumpHeight*math.cos(math.radians(self.degrees))
             self.posxTL -= jumpHeight*math.sin(math.radians(self.degrees))
             self.velocityY = -15 # Set initial upwards velocity
             self.velocityX = -15
@@ -80,6 +80,10 @@ class Player():
         for block in app.chunk:
             if isCollided(block, self):
                 print("k")
+            else:
+                print('aohgwaighe')
+
+
         #TODO: add thing ot make sure character stays within bounds
       
 
@@ -112,6 +116,8 @@ def stopClock(currentTime):
 
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(block, player):
+    print(player.posxBR, player.posyBR)
+    print(block.posxBR, block.posxBR)
     
     if ((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
         (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL)):
