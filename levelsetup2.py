@@ -12,7 +12,6 @@ class Block:
         self.xIndex = xIndex
         self.yIndex = yIndex
         self.blockType = blockType
-
         
         #POSITIONS
         self.posxTL = self.xIndex*app.blockLength
@@ -63,11 +62,5 @@ startChunk = (
             createBlockRow(0, app.totalBlocksInRow, 0, 'dirt')) 
 
 def generateChunk(chunk):
-    # print(len(chunk))
-    # print(app.totalBlocksInRow)
-    # print(app.width/app.blockLength)
-    # print(math.ceil(app.width/app.blockLength))
-    # for count, block in enumerate(chunk):
     for block in chunk:
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, fill = block.color)
-        # drawLabel(count, block.posxTL, block.posyTL)

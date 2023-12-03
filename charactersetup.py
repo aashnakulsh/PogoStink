@@ -4,11 +4,22 @@ import math
 
 #Player class
 class Player():
-    def __init__(self, posx, posy):
+    def __init__(self, posxTL, posyTL):
         self.lives = 3
 
-        self.posx = posx
-        self.posy = posy
+        #POSITIONS
+        self.posxTL = posxTL
+        self.posyTL = posyTL
+
+        self.posxTR = self.posxTL + app.blockLength
+        self.posyTR = self.posxTL
+
+        self.posxBL = self.posxTL
+        self.posyBL = self.posyTL + app.blockLength
+
+        self.posxBR = self.posxTL + app.blockLength
+        self.posyBR = self.posyTL + app.blockLength
+
         self.degrees = 0
 
         self.velocityX = 0 # Horizontal velocity
@@ -26,7 +37,7 @@ class Player():
 
     def draw(self):
         #from F23_Demos for images (makeNewImages.py)
-        drawImage(CMUImage(self.image), self.posx, self.posy, 
+        drawImage(CMUImage(self.image), self.posxTL, self.posyTL, 
                   rotateAngle = self.degrees)
 
     
@@ -34,17 +45,17 @@ class Player():
         jumpHeight = -30
 
         #SUPPOSE TILTED BY 5 DEGREES
-        if 575 - self.posy < 30:
-            # print(575 - self.posy)
-            # self.posy += jumpHeight
+        if 575 - self.posyTL < 30:
+            # print(575 - self.posyTL)
+            # self.posyTL += jumpHeight
             # dx, dy = calculateProjectileMotion(45, -20, app.currentTime)
             # app.heldTime = 0
             self.posy += jumpHeight*math.cos(math.radians(self.degrees))
-            self.posx -= jumpHeight*math.sin(math.radians(self.degrees))
+            self.posxTL -= jumpHeight*math.sin(math.radians(self.degrees))
             self.velocityY = -15 # Set initial upwards velocity
             self.velocityX = -15
 
-            # self.posx -= dx
+            # self.posxTL -= dx
             # self.posy += dy
 
             app.currentTime = 0
@@ -55,10 +66,6 @@ class Player():
             (app.player.degrees == 90 and deg < 0) or
             (app.player.degrees == -90 and deg > 0)):
             app.player.degrees += deg
-
-    def getPlayerBlock(self):
-        #returns block # that player is on
-        return int(self.posx//(app.width/app.blockScale) + 1)
     
     def step(self):
         self.velocityY += self.gravity
@@ -66,12 +73,13 @@ class Player():
         #                     chunk generation)
         
         # If the character has hit the ground, then rebound bounce
-        if self.posy >= 575:
+        if self.posyTL >= 575:
             self.velocityY = -10
-        self.posy += self.velocityY
+        self.posyTL += self.velocityY
             
-
-
+        for block in app.chunk:
+            if isCollided(block, self):
+                print("k")
         #TODO: add thing ot make sure character stays within bounds
       
 
@@ -101,3 +109,18 @@ def startClock():
 def stopClock(currentTime):
     app.runClock = False
     return currentTime
+
+#Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
+def isCollided(block, player):
+    
+    if ((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
+        (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL)):
+        return True
+    else:
+        return False
+    # if ((right2 >= left1) and (right1 >= left2) and
+    #     (bottom2 >= top1) and (bottom1 >= top2)):
+    #     return True
+    # else:
+    #     return False
+    

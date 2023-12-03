@@ -14,13 +14,6 @@ def onAppStart(app):
     # app.runClock = False
     app.chunk = startChunk
 
-
-
-    # app.blockHeight = app.height/app.blockScale
-    # app.blockWidth = app.width/app.blockScale
-    # print(app.blockHeight)
-
-    
     app.player = Player(50, 50)
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
