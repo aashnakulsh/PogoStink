@@ -1,4 +1,5 @@
 from cmu_graphics import *
+from levelsetup2 import *
 from PIL import Image, ImageDraw
 import math    
 
@@ -6,19 +7,21 @@ import math
 class Player():
     def __init__(self, posxTL, posyTL):
         self.lives = 3
+        self.width = 25
+        self.height = 50
 
         #POSITIONS
         self.posxTL = posxTL
         self.posyTL = posyTL
 
-        self.posxTR = self.posxTL + app.blockLength
+        self.posxTR = self.posxTL + self.width
         self.posyTR = self.posxTL
 
         self.posxBL = self.posxTL
-        self.posyBL = self.posyTL + app.blockLength
+        self.posyBL = self.posyTL + self.height
 
-        self.posxBR = self.posxTL + app.blockLength
-        self.posyBR = self.posyTL + app.blockLength
+        self.posxBR = self.posxTL + self.width
+        self.posyBR = self.posyTL + self.height
 
         self.degrees = 0
 
@@ -26,8 +29,6 @@ class Player():
         self.velocityY = 0 # Upwards velocity
         self.gravity = 1
 
-        self.width = 25
-        self.height = 50
 
         #TODO: get apperance right!
         #from F23_Demos for images (makeNewImages.py)
@@ -80,8 +81,8 @@ class Player():
         for block in app.chunk:
             if isCollided(block, self):
                 print("k")
-            else:
-                print('aohgwaighe')
+            # else:
+            #     print('aohgwaighe')
 
 
         #TODO: add thing ot make sure character stays within bounds
@@ -116,8 +117,8 @@ def stopClock(currentTime):
 
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(block, player):
-    print(player.posxBR, player.posyBR)
-    print(block.posxBR, block.posxBR)
+    # print(player.posxBR, player.posyBR)
+    # print(block.posxBR, block.posxBR)
     
     if ((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
         (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL)):

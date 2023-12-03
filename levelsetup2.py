@@ -63,4 +63,5 @@ startChunk = (
 
 def generateChunk(chunk):
     for block in chunk:
-        drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, fill = block.color)
+        drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
+                 fill = block.color, border = 'black')
