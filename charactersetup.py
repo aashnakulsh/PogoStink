@@ -5,27 +5,29 @@ import math
 
 #Player class
 class Player():
-    def __init__(self, centerX, centerY):
+    def __init__(self, cx, cy):
         self.lives = 3
         self.width = 50
         self.height = 50
 
         #POSITIONS
 
-        self.centerX = centerX
-        self.centerY = centerY
+        self.cx = cx
+        self.cy = cy
+        
+        
+        
+        # self.posxTL = centerX - (0.5*self.width)
+        # self.posyTL = centerY - (0.5*self.height)
 
-        self.posxTL = centerX - (0.5*self.width)
-        self.posyTL = centerY - (0.5*self.height)
+        # self.posxTR = self.posxTL + self.width
+        # self.posyTR = self.posyTL
 
-        self.posxTR = self.posxTL + self.width
-        self.posyTR = self.posyTL
+        # self.posxBL = self.posxTL
+        # self.posyBL = self.posyTL + self.height
 
-        self.posxBL = self.posxTL
-        self.posyBL = self.posyTL + self.height
-
-        self.posxBR = self.posxTL + self.width
-        self.posyBR = self.posyTL + self.height
+        # self.posxBR = self.posxTL + self.width
+        # self.posyBR = self.posyTL + self.height
 
 
         self.degrees = 0
@@ -43,8 +45,9 @@ class Player():
 
     def draw(self):
         #from F23_Demos for images (makeNewImages.py)
-        drawImage(CMUImage(self.image), self.centerX, self.centerY, 
+        drawImage(CMUImage(self.image), self.cx, self.cy, 
                   rotateAngle = self.degrees)
+        print(self.posxTL, self.posyTL)
 
     
     def jumpOnPogoStick(self):
@@ -52,10 +55,10 @@ class Player():
 
         #give player 30 pixels (between ground and player bottom) 
         # of room to press space in
-        if getGroundHeightPixels(app.chunk) - self.centerY < 30:
+        if getGroundHeightPixels(app.chunk) - self.cy < 30:
 
-            self.centerX += jumpHeight*math.cos(math.radians(self.degrees))
-            self.centerY -= jumpHeight*math.sin(math.radians(self.degrees))
+            self.cx += jumpHeight*math.cos(math.radians(self.degrees))
+            self.cy -= jumpHeight*math.sin(math.radians(self.degrees))
             self.velocityY = -15 # Set initial upwards velocity
             self.velocityX = -15
 
@@ -72,9 +75,9 @@ class Player():
         self.velocityY += self.gravity
         
         # If the character has hit the ground, then rebound bounce
-        if self.centerY >= getGroundHeightPixels(app.chunk):
+        if self.cy >= getGroundHeightPixels(app.chunk):
             self.velocityY = -10
-        self.centerY += self.velocityY
+        self.cy += self.velocityY
 
         #TODO: using collision function, check how much player goes through ground by then adjust player pos accordingly (subtract)
         #TODO: add thing ot make sure character stays within bounds
@@ -93,10 +96,10 @@ class Player():
             app.player.degrees += deg
 
             #update player corner coordinates (positions)
-            self.posxTL, self.posyTL = Player.findRotatedCoords(self.posxTL, self.posyTL, self.centerX, self.centerY, deg)
-            self.posxBL, self.posyBL = Player.findRotatedCoords(self.posxBL, self.posxBL, self.centerX, self.centerY, deg)
-            self.posxBR, self.posyBR = Player.findRotatedCoords(self.posxBR, self.posxBR, self.centerX, self.centerY, deg)
-            self.posxTR, self.posyTR = Player.findRotatedCoords(self.posxTR, self.posyTR, self.centerX, self.centerY, deg)
+            self.posxTL, self.posyTL = Player.findRotatedCoords(self.posxTL, self.posyTL, self.cx, self.cy, deg)
+            self.posxBL, self.posyBL = Player.findRotatedCoords(self.posxBL, self.posxBL, self.cx, self.cy, deg)
+            self.posxBR, self.posyBR = Player.findRotatedCoords(self.posxBR, self.posxBR, self.cx, self.cy, deg)
+            self.posxTR, self.posyTR = Player.findRotatedCoords(self.posxTR, self.posyTR, self.cx, self.cy, deg)
         
 
 

@@ -9,9 +9,10 @@ from PIL import Image, ImageDraw
 def onAppStart(app):
     app.gravity = 1
     app.chunk = defaultChunk1
+    app.chunkCollidable = defaultChunk1Collidable
     # print(createRandomHoles(app.chunk))
-    print(getGroundHeightIndex(app.chunk))
-    print(getGroundHeightPixels(app.chunk))
+    # print(getGroundHeightIndex(app.chunk))
+    # print(getGroundHeightPixels(app.chunk))
     app.player = Player(app.width//2, 50)
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~

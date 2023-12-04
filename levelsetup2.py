@@ -70,6 +70,8 @@ defaultChunk1 = (
             createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
             createBlockRow(0, app.totalBlocksInRow, 0, 'dirt')) 
 
+defaultChunk1Collidable = createBlockRow(0, app.totalBlocksInRow, 3, 'grass')
+
 def getGroundHeightIndex(chunk):
     for block in chunk:
         if block.blockType == 'grass':
