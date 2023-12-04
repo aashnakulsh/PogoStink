@@ -36,7 +36,7 @@ def game_onKeyHold(app, key):
     if 'left' in key:
         app.player.rotate(-3)
     if 'y' in key:
-        print(app.player.posyTL)
+        print(app.player.posxTL, app.player.posyTL)
 
 
 

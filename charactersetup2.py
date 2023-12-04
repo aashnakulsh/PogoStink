@@ -32,7 +32,6 @@ class Player():
         (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+(hh*math.sin(math.radians(self.degrees)))), 
                                       self.cy-(hw*math.sin(math.radians(self.degrees))-(hh*math.cos(math.radians(self.degrees)))))
 
-
         self.velocityX = 0 # Horizontal velocity
         self.velocityY = 0 # Upwards velocity
         self.gravity = 1
@@ -48,9 +47,21 @@ class Player():
         #from F23_Demos for images (makeNewImages.py)
         drawImage(CMUImage(self.image), self.cx, self.cy, 
                   rotateAngle = self.degrees)
-        print(self.posxTL, self.posyTL)
-
+        # print(self.posxTL, self.posyTL)
+    
+    def updatePlayerPositions(self):
+        hw = self.width/2
+        hh = self.height/2
         
+        (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-(hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy-(hw*math.sin(math.radians(self.degrees))+(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxTR, self.posyTR) = (self.cx+(hw*math.cos(math.radians(self.degrees))-(hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy+(hw*math.sin(math.radians(self.degrees))+(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxBR, self.posyBR) = (self.cx+(hw*math.cos(math.radians(self.degrees))+(hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy+(hw*math.sin(math.radians(self.degrees))-(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+(hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy-(hw*math.sin(math.radians(self.degrees))-(hh*math.cos(math.radians(self.degrees)))))
+
     def jumpOnPogoStick(self):
         # jumpHeight = -30
 
@@ -82,7 +93,7 @@ class Player():
         # If the character has hit the ground, then rebound bounce
         if self.cy >= getGroundHeightPixels(app.chunk):
             self.velocityY = -10
-        self.cy += self.velocityY
+        # self.cy += self.velocityY
 
         #TODO: using collision function, check how much player goes through ground by then adjust player pos accordingly (subtract)
         #TODO: add thing ot make sure character stays within bounds
@@ -95,17 +106,14 @@ class Player():
     
     def rotate(self, deg):
         #update player appearance
-        if ((-90 < app.player.degrees < 90) or
-            (app.player.degrees == 90 and deg < 0) or
-            (app.player.degrees == -90 and deg > 0)):
-            app.player.degrees += deg
-
-            #update player corner coordinates (positions)
-            # self.posxTL, self.posyTL = Player.findRotatedCoords(self.posxTL, self.posyTL, self.centerX, self.centerY, deg)
-            # self.posxBL, self.posyBL = Player.findRotatedCoords(self.posxBL, self.posxBL, self.centerX, self.centerY, deg)
-            # self.posxBR, self.posyBR = Player.findRotatedCoords(self.posxBR, self.posxBR, self.centerX, self.centerY, deg)
-            # self.posxTR, self.posyTR = Player.findRotatedCoords(self.posxTR, self.posyTR, self.centerX, self.centerY, deg)
-
+        if ((-90 < self.degrees < 90) or
+            (self.degrees == 90 and deg < 0) or
+            (self.degrees == -90 and deg > 0)):
+            self.degrees += deg
+            
+        #update player corner coordinates (positions)
+            self.updatePlayerPositions()
+            
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(block, player):
     if ((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
@@ -113,3 +121,6 @@ def isCollided(block, player):
         return True
     else:
         return False
+    
+
+    
