@@ -11,35 +11,16 @@ class Player():
         self.height = 50
 
         #POSITIONS
-
         self.cx = centerX
         self.cy = centerY
         
         self.degrees = 0
 
-        #https://math.stackexchange.com/questions/1490115/how-to-find-corners-of-square-from-its-center-point
-        #https://math.stackexchange.com/questions/2518607/how-to-find-vertices-of-a-rectangle-when-center-coordinates-and-angle-of-tilt-is 
-        hw = self.width/2
-        hh = self.height/2
-        (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))+
-                                               (hh*math.cos(math.radians(self.degrees)))))
-        
-        (self.posxTR, self.posyTR) = (self.cx+(hw*math.cos(math.radians(self.degrees))-
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))+
-                                               (hh*math.cos(math.radians(self.degrees)))))
-        
-        (self.posxBR, self.posyBR) = (self.cx+(hw*math.cos(math.radians(self.degrees))+
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))-
-                                               (hh*math.cos(math.radians(self.degrees)))))
-        
-        (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))-
-                                               (hh*math.cos(math.radians(self.degrees)))))
+        playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
+        (self.posxTL, self.posyTL) = playerVertices[0]
+        (self.posxTR, self.posyTR) = playerVertices[1]
+        (self.posxBR, self.posyBR) = playerVertices[2]
+        (self.posxBL, self.posyBL) = playerVertices[3]
 
         self.velocityX = 0 # Horizontal velocity
         self.velocityY = 0 # Upwards velocity
@@ -58,25 +39,11 @@ class Player():
         # print(self.posxTL, self.posyTL)
     
     def updatePlayerPositions(self):
-        hw = self.width/2
-        hh = self.height/2
-        
-        (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))+
-                                               (hh*math.cos(math.radians(self.degrees)))))
-        (self.posxTR, self.posyTR) = (self.cx+(hw*math.cos(math.radians(self.degrees))-
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))+
-                                               (hh*math.cos(math.radians(self.degrees)))))
-        (self.posxBR, self.posyBR) = (self.cx+(hw*math.cos(math.radians(self.degrees))+
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))-
-                                               (hh*math.cos(math.radians(self.degrees)))))
-        (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+
-                                               (hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))-
-                                               (hh*math.cos(math.radians(self.degrees)))))
+        playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
+        (self.posxTL, self.posyTL) = playerVertices[0]
+        (self.posxTR, self.posyTR) = playerVertices[1]
+        (self.posxBR, self.posyBR) = playerVertices[2]
+        (self.posxBL, self.posyBL) = playerVertices[3]
 
     def jumpOnPogoStick(self):
         # jumpHeight = -30
@@ -95,29 +62,25 @@ class Player():
             # self.centerX += -15 
 
     def step(self):
-        #AASHNA YOU ARE WORKIGN ON COLLISION STUFF
-        #COLLIDING
-        # groundHeight = getGroundHeightPixels(app.chunk)
-        # groundHeight = 670.0+self.height
-        
+        self.velocityY += self.gravity
+
+        #using Collision to find groundHeight at any moment
         for block in app.chunkCollidable:
             if isCollided(self, block):
                 app.groundHeight = block.posyTL
-                
-                # print(self.posxBL)
-                # print("k", block.posyTL)
+                # print('aiwehgoaiwheg', app.groundHeight)
+                print(app.groundHeight)
+                self.velocityY=-10
 
-        self.velocityY += self.gravity
-        
         # If the character has hit the ground, then rebound bounce
-        # if self.cy >= getGroundHeightPixels(app.chunk):
-        if self.posyBL >= app.groundHeight :        #or self.posyBR >= groundHeight
-            print(self.posyBL, app.groundHeight, self.posyBL-app.groundHeight, self.cy, self.cy-(self.posyBL-app.groundHeight), )
-            self.cy = self.cy-(self.posyBL-app.groundHeight)
-            
-            print(self.cy)
+        # if self.posyBL >= app.groundHeight :        #or self.posyBR >= groundHeight
+            # print(self.posyBL, app.groundHeight, self.posyBL-app.groundHeight, self.cy, self.cy-(self.posyBL-app.groundHeight), )
+            # self.cy = self.cy-(self.posyBL-app.groundHeight)
+            # self.cy = app.groundHeight-self.width
+            # self.velocityY = -10
 
-            self.velocityY = -10
+        # if self.posyBL >= app.groundHeight:
+            # print(self.posxBL)
         self.cy += self.velocityY
 
         #update player corner coordinates (positions)
@@ -149,4 +112,26 @@ def isCollided(block, player):
         return False
     
 
-    
+#Combination of these two sources and my own trig knowledge was used to create these functions:
+        #https://math.stackexchange.com/questions/1490115/how-to-find-corners-of-square-from-its-center-point
+        #https://math.stackexchange.com/questions/2518607/how-to-find-vertices-of-a-rectangle-when-center-coordinates-and-angle-of-tilt-is 
+
+def rotatePoint(point, angle):
+    angleRad = math.radians(angle)
+    x, y = point
+    rotatedX = x * math.cos(angleRad) - y * math.sin(angleRad)
+    rotatedY = x * math.sin(angleRad) + y * math.cos(angleRad)
+    return [rotatedX, rotatedY]
+
+def calculateRotatedRectangleVertices(center, width, height, angle):
+    halfWidth = width / 2
+    halfHeight = height / 2
+    unrotatedCorners = [
+        [-halfWidth, -halfHeight],  
+        [halfWidth, -halfHeight],   
+        [halfWidth, halfHeight],    
+        [-halfWidth, halfHeight]    
+    ]
+    rotatedCorners = [rotatePoint(point, angle) for point in unrotatedCorners]
+    rotatedVertices = [[point[0] + center[0], point[1] + center[1]] for point in rotatedCorners]
+    return rotatedVertices

@@ -19,9 +19,14 @@ def onAppStart(app):
 def game_redrawAll(app):
     app.player.draw()
     generateChunk(app.chunk)
-    drawLine(0, 575, app.width, 575, fill = 'red')
-    drawCircle(app.player.posxTL, app.player.posyTL, 2, fill = 'pink')
+    drawLine(0, 600, app.width, 600, fill = 'red')
 
+    #TODO: delete later!
+    playerVertices = calculateRotatedRectangleVertices([app.player.cx, app.player.cy], app.player.width, app.player.height, app.player.degrees)
+    drawCircle(int(playerVertices[0][0])+app.player.width/2, int(playerVertices[0][1])+app.player.height/2, 5, fill = 'red')
+    drawCircle(int(playerVertices[1][0])+app.player.width/2, int(playerVertices[1][1])+app.player.height/2, 5, fill = 'pink')
+    drawCircle(int(playerVertices[2][0])+app.player.width/2, int(playerVertices[2][1])+app.player.height/2, 5, fill = 'blue')
+    drawCircle(int(playerVertices[3][0])+app.player.width/2, int(playerVertices[3][1])+app.player.height/2, 5, fill = 'purple')
 
 def game_onKeyPress(app, key):
     if key == 'w':
