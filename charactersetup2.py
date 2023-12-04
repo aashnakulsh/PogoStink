@@ -7,7 +7,7 @@ import math
 class Player():
     def __init__(self, centerX, centerY):
         self.lives = 3
-        self.width = 25
+        self.width = 50
         self.height = 50
 
         #POSITIONS
@@ -18,6 +18,7 @@ class Player():
         self.degrees = 0
 
         #https://math.stackexchange.com/questions/1490115/how-to-find-corners-of-square-from-its-center-point
+        #https://math.stackexchange.com/questions/2518607/how-to-find-vertices-of-a-rectangle-when-center-coordinates-and-angle-of-tilt-is 
         hw = self.width/2
         hh = self.height/2
         (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-
@@ -82,8 +83,8 @@ class Player():
 
         #give player 30 pixels (between ground and player bottom) 
         # of room to press space in
-        if getGroundHeightPixels(app.chunk) - self.cy < 30:
-
+        # if getGroundHeightPixels(app.chunk) - self.cy < 30:
+        if app.groundHeight - self.cy < 30:
             # self.centerX += jumpHeight*math.cos(math.radians(self.degrees))
             # self.centerY -= jumpHeight*math.sin(math.radians(self.degrees))
             
@@ -94,23 +95,27 @@ class Player():
             # self.centerX += -15 
 
     def step(self):
-        #AASHNA YOU ARE WORKIGN ON CLISSION STUFF
+        #AASHNA YOU ARE WORKIGN ON COLLISION STUFF
         #COLLIDING
         # groundHeight = getGroundHeightPixels(app.chunk)
-        groundHeight = 670.0
+        # groundHeight = 670.0+self.height
+        
         for block in app.chunkCollidable:
             if isCollided(self, block):
-                # groundHeight = block.posyTL
+                app.groundHeight = block.posyTL
                 
                 # print(self.posxBL)
-                print("k", self.posyBL)
+                # print("k", block.posyTL)
 
         self.velocityY += self.gravity
         
         # If the character has hit the ground, then rebound bounce
         # if self.cy >= getGroundHeightPixels(app.chunk):
-        if self.posyBL >= groundHeight or self.posyBR >= groundHeight:
-            print(self.posyBL, self.posyBR, groundHeight, self.cy)
+        if self.posyBL >= app.groundHeight :        #or self.posyBR >= groundHeight
+            print(self.posyBL, app.groundHeight, self.posyBL-app.groundHeight, self.cy, self.cy-(self.posyBL-app.groundHeight), )
+            self.cy = self.cy-(self.posyBL-app.groundHeight)
+            
+            print(self.cy)
 
             self.velocityY = -10
         self.cy += self.velocityY

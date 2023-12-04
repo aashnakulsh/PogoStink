@@ -19,7 +19,8 @@ def onAppStart(app):
 def game_redrawAll(app):
     app.player.draw()
     generateChunk(app.chunk)
-    drawLine(0, 670.0, app.width, 670.0, fill = 'red')
+    drawLine(0, 575, app.width, 575, fill = 'red')
+    drawCircle(app.player.posxTL, app.player.posyTL, 2, fill = 'pink')
 
 
 def game_onKeyPress(app, key):

@@ -7,6 +7,7 @@ app.height = 800
 app.blockLength = 50
 app.totalBlocksInRow = math.ceil(app.width/app.blockLength)
 app.totalBlocksInCol = math.ceil(app.height/app.blockLength)
+app.groundHeight = app.height
 
 class Block:
     def __init__(self, xIndex, yIndex, blockType):
@@ -62,7 +63,7 @@ def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
 def generateChunk(chunk):
     for block in chunk:
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
-                 fill = block.color, border = 'black')
+                 fill = block.color, border = 'black', opacity = 50)
 
 defaultChunk1 = (
             createBlockRow(0, app.totalBlocksInRow, 3, 'grass') |
