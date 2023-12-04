@@ -83,7 +83,27 @@ def getGroundHeightPixels(chunk):
         if block.blockType == 'grass':
             return block.posyTL-app.blockLength
 
-def createRandomHoles(chunk):
-    holeLength = random.randint(0, app.totalBlocksInRow-1)
-    holeHeight = random.randint(0, getGroundHeightIndex(chunk))
-    return holeLength, holeHeight
+class Hole:
+    def __init__(self, chunk):
+        groundHeightIndex = getGroundHeightIndex(chunk)
+        self.holeXIndex = random.randint(0, app.totalBlocksInRow-1) #0 - total blocks in row
+        self.holeLength = random.randint(0, app.totalBlocksInRow-1) #0 - total blocks in row
+        self.holeHeight = random.randint(0, groundHeightIndex) #0 - ground height
+        self.itemBottomOfHole = random.choices(['garbage', 'ooze', 'empty'], [40, 20, 40])
+        self.isPlatform = random.choices([True, False], [70, 30])
+        if self.isPlatform:
+            self.platformHeight = random.randint(groundHeightIndex, app.totalBlocksInCol-1) #ground height - total blocks in col
+            self.itemOnPlatform = random.choices(['smog', 'empty', 'life', 'invincibility'], [30, 30, 30, 10])
+        else:
+            self.platformHeight = None
+            self.itemOnPlatform = None
+    # return holeIndex, holeLength, holeHeight, itemBottomOfHole, isPlatform, platformHeight, itemOnPlatform
+
+def addHoleToChunks(chunk):
+    hole = Hole(chunk)
+    # for block in chunk:
+    #     if chunk
+    pass
+
+def isChunkBeatable(chunk):
+    pass

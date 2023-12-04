@@ -52,6 +52,7 @@ class Player():
         # of room to press space in
         # if getGroundHeightPixels(app.chunk) - self.cy < 30:
         if app.groundHeight - self.cy < 30:
+            print(app.groundHeight - self.cy)
             # self.centerX += jumpHeight*math.cos(math.radians(self.degrees))
             # self.centerY -= jumpHeight*math.sin(math.radians(self.degrees))
             
@@ -69,13 +70,13 @@ class Player():
             if isCollided(self, block):
                 app.groundHeight = block.posyTL
                 # print('aiwehgoaiwheg', app.groundHeight)
-                print(app.groundHeight)
+                # print(app.groundHeight)
                 self.velocityY=-10
 
         # If the character has hit the ground, then rebound bounce
-        # if self.posyBL >= app.groundHeight :        #or self.posyBR >= groundHeight
-            # print(self.posyBL, app.groundHeight, self.posyBL-app.groundHeight, self.cy, self.cy-(self.posyBL-app.groundHeight), )
-            # self.cy = self.cy-(self.posyBL-app.groundHeight)
+        if self.posyBL >= app.groundHeight or self.posyBR >= app.groundHeight:
+            # print(self.posyBL, app.groundHeight, self.posyBL-app.groundHeight, self.cy,self.cy-(self.posyBL-app.groundHeight))
+            self.cy = self.cy-(self.posyBL-app.groundHeight)
             # self.cy = app.groundHeight-self.width
             # self.velocityY = -10
 
