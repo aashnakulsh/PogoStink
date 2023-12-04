@@ -20,17 +20,25 @@ class Player():
         #https://math.stackexchange.com/questions/1490115/how-to-find-corners-of-square-from-its-center-point
         hw = self.width/2
         hh = self.height/2
-        (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))+(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy-(hw*math.sin(math.radians(self.degrees))+
+                                               (hh*math.cos(math.radians(self.degrees)))))
         
-        (self.posxTR, self.posyTR) = (self.cx+(hw*math.cos(math.radians(self.degrees))-(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))+(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxTR, self.posyTR) = (self.cx+(hw*math.cos(math.radians(self.degrees))-
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy+(hw*math.sin(math.radians(self.degrees))+
+                                               (hh*math.cos(math.radians(self.degrees)))))
         
-        (self.posxBR, self.posyBR) = (self.cx+(hw*math.cos(math.radians(self.degrees))+(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))-(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxBR, self.posyBR) = (self.cx+(hw*math.cos(math.radians(self.degrees))+
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy+(hw*math.sin(math.radians(self.degrees))-
+                                               (hh*math.cos(math.radians(self.degrees)))))
         
-        (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))-(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy-(hw*math.sin(math.radians(self.degrees))-
+                                               (hh*math.cos(math.radians(self.degrees)))))
 
         self.velocityX = 0 # Horizontal velocity
         self.velocityY = 0 # Upwards velocity
@@ -42,7 +50,6 @@ class Player():
         self.image = Image.new('RGB', (self.width, self.height), 
                                backgroundColor)
         
-
     def draw(self):
         #from F23_Demos for images (makeNewImages.py)
         drawImage(CMUImage(self.image), self.cx, self.cy, 
@@ -53,14 +60,22 @@ class Player():
         hw = self.width/2
         hh = self.height/2
         
-        (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))+(hh*math.cos(math.radians(self.degrees)))))
-        (self.posxTR, self.posyTR) = (self.cx+(hw*math.cos(math.radians(self.degrees))-(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))+(hh*math.cos(math.radians(self.degrees)))))
-        (self.posxBR, self.posyBR) = (self.cx+(hw*math.cos(math.radians(self.degrees))+(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy+(hw*math.sin(math.radians(self.degrees))-(hh*math.cos(math.radians(self.degrees)))))
-        (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+(hh*math.sin(math.radians(self.degrees)))), 
-                                      self.cy-(hw*math.sin(math.radians(self.degrees))-(hh*math.cos(math.radians(self.degrees)))))
+        (self.posxTL, self.posyTL) = (self.cx-(hw*math.cos(math.radians(self.degrees))-
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy-(hw*math.sin(math.radians(self.degrees))+
+                                               (hh*math.cos(math.radians(self.degrees)))))
+        (self.posxTR, self.posyTR) = (self.cx+(hw*math.cos(math.radians(self.degrees))-
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy+(hw*math.sin(math.radians(self.degrees))+
+                                               (hh*math.cos(math.radians(self.degrees)))))
+        (self.posxBR, self.posyBR) = (self.cx+(hw*math.cos(math.radians(self.degrees))+
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy+(hw*math.sin(math.radians(self.degrees))-
+                                               (hh*math.cos(math.radians(self.degrees)))))
+        (self.posxBL, self.posyBL) = (self.cx-(hw*math.cos(math.radians(self.degrees))+
+                                               (hh*math.sin(math.radians(self.degrees)))), 
+                                      self.cy-(hw*math.sin(math.radians(self.degrees))-
+                                               (hh*math.cos(math.radians(self.degrees)))))
 
     def jumpOnPogoStick(self):
         # jumpHeight = -30
@@ -79,29 +94,37 @@ class Player():
             # self.centerX += -15 
 
     def step(self):
-        groundHeight = None
+        #AASHNA YOU ARE WORKIGN ON CLISSION STUFF
+        #COLLIDING
+        # groundHeight = getGroundHeightPixels(app.chunk)
+        groundHeight = 670.0
         for block in app.chunkCollidable:
             if isCollided(self, block):
-                #if objects collide, find out by how much in y:
+                # groundHeight = block.posyTL
+                
+                # print(self.posxBL)
+                print("k", self.posyBL)
 
-                
-                print(self.posxBL)
-                print("k", block.posyTL - self.posxBL)
-                
         self.velocityY += self.gravity
         
         # If the character has hit the ground, then rebound bounce
-        if self.cy >= getGroundHeightPixels(app.chunk):
-            self.velocityY = -10
-        # self.cy += self.velocityY
+        # if self.cy >= getGroundHeightPixels(app.chunk):
+        if self.posyBL >= groundHeight or self.posyBR >= groundHeight:
+            print(self.posyBL, self.posyBR, groundHeight, self.cy)
 
+            self.velocityY = -10
+        self.cy += self.velocityY
+
+        #update player corner coordinates (positions)
+        self.updatePlayerPositions()
+        
         #TODO: using collision function, check how much player goes through ground by then adjust player pos accordingly (subtract)
         #TODO: add thing ot make sure character stays within bounds
       
     @staticmethod
     def findRotatedCoords(posx, posy, cx, cy, angle):
-        xcoord = (posx-cx) * math.cos(math.radians(angle))- (posy-cy)*math.sin(math.radians(angle)) + cx
-        ycoord = (posy-cy) * math.sin(math.radians(angle))+ (posy-cy)*math.cos(math.radians(angle)) + cy
+        xcoord = (posx-cx) * math.cos(math.radians(angle)) - (posy-cy)*math.sin(math.radians(angle)) + cx
+        ycoord = (posy-cy) * math.sin(math.radians(angle)) + (posy-cy)*math.cos(math.radians(angle)) + cy
         return xcoord, ycoord
     
     def rotate(self, deg):
@@ -111,8 +134,6 @@ class Player():
             (self.degrees == -90 and deg > 0)):
             self.degrees += deg
             
-        #update player corner coordinates (positions)
-            self.updatePlayerPositions()
             
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(block, player):
