@@ -86,7 +86,6 @@ def getGroundHeightPixels(chunk):
 class Hole:
     def __init__(self, chunk):
         groundHeightIndex = getGroundHeightIndex(chunk)
-        print(app.totalBlocksInRow)
         self.xIndex = random.randint(3, app.totalBlocksInRow-5) #1 - total blocks in row
         self.length = random.randint(1, 5) #1 - total blocks in row
         self.yIndex = groundHeightIndex
@@ -95,32 +94,74 @@ class Hole:
         self.isPlatform = random.choices([True, False], [70, 30])
         if self.isPlatform:
             self.platformHeight = random.randint(groundHeightIndex, groundHeightIndex+3) #ground height - total blocks in col
-            self.itemOnPlatform = random.choices(['smog', 'empty', 'life', 'invincibility'], [30, 30, 30, 10])
+            self.item = random.choices(['smog', 'empty', 'life', 'invincibility'], [30, 30, 30, 10])
+            self.itemXIndex = random.randint(self.xIndex, self.xIndex + self.length)
         else:
             self.platformHeight = None
-            self.itemOnPlatform = None
+            self.item = None
     # return holeIndex, holeLength, holeHeight, itemBottomOfHole, isPlatform, platformHeight, itemOnPlatform
 
 def addHolesToChunks(chunk):
     blocksToRemove = set()
     blocksToAdd = set()
-    numberOfHoles = random.randint(1, 5)
+    numberOfHoles = random.choices([1, 2, 3, 4], [20, 30, 40, 10])[0]
     print(numberOfHoles)
+
+    holes = []
     for num in range(numberOfHoles):
         hole = Hole(chunk)
+        holes.append(hole)
         
         for block in chunk:
             if ((hole.xIndex <= block.xIndex <= hole.xIndex + hole.length) and
                 hole.yIndex >= block.yIndex >= hole.yIndex - hole.height):
                 blocksToRemove.add(block)
-
+        
         if hole.isPlatform:
             for i in range(hole.length+1):
+                print(hole.xIndex + i)
                 blocksToAdd.add(Block(hole.xIndex + i, hole.yIndex + hole.platformHeight, 'platform'))
+
+            if str(hole.item) == ['smog']:
+                blocksToAdd.add(Block(hole.itemXIndex, hole.yIndex + hole.platformHeight + 1, 'smog'))
+            
+            if hole.item == ['life']:
+                blocksToAdd.add(Block(hole.itemXIndex, hole.yIndex + hole.platformHeight + 1, 'life'))
+            
+            if hole.item == ['invincibility']:
+                blocksToAdd.add(Block(hole.itemXIndex, hole.yIndex + hole.platformHeight + 1, 'invincibility'))
+
 
     return (chunk-blocksToRemove) | blocksToAdd
 
-def isChunkBeatable(chunk):
+def findOverlappingBounds(holes):
+    # Sort holes based on x_index
+    sortedHoles = sorted(holes, key=lambda hole: hole.xIndex)
+
+    # Initialize variables
+    start = sortedHoles[0].xIndex
+    end = sortedHoles[0].xIndex + sortedHoles[0].length
+
+    # Lists to store the results
+    overlappingBounds = []
+
+    # Iterate through sorted holes to find the overlapping bounds
+    for hole in sortedHoles[1:]:
+        if hole.xIndex <= end:  # Overlapping holes
+            end = max(end, hole.xIndex + hole.length)
+        else:  # Non-overlapping hole found
+            overlappingBounds.append((start, end))
+            start = hole.xIndex
+            end = hole.xIndex + hole.length
+
+    # Add the last set of overlapping bounds
+    overlappingBounds.append((start, end))
+    
+    return overlappingBounds
+
+def isChunkBeatable(chunk, holes):
+    #chunk is a set, holes is a list
+    
     pass
 
 def generateLevel(defaultChunk):

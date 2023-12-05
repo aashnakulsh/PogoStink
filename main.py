@@ -47,7 +47,7 @@ def game_onKeyPress(app, key):
         setActiveScreen('help')
     if key == 'space':
         app.player.jumpOnPogoStick()
-        print("ok")
+        print("I jumped!")
 
 def game_onKeyHold(app, key):
     if 'right' in key:
