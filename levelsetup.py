@@ -1,14 +1,12 @@
 from cmu_graphics import *
 import math
 import random
-
 app.width = 1450
 app.height = 800
 app.blockLength = 40
 app.totalBlocksInRow = math.ceil(app.width/app.blockLength)
 app.totalBlocksInCol = math.ceil(app.height/app.blockLength)
 app.groundHeight = app.height
-
 class Block:
     def __init__(self, xIndex, yIndex, blockType):
         self.xIndex = xIndex
@@ -19,23 +17,18 @@ class Block:
         #Top Left of Block (x, y)
         self.posxTL = self.xIndex*app.blockLength 
         self.posyTL = app.height - (self.yIndex+1)*app.blockLength
-
         #Top Right of Block (x, y)
         self.posxTR = self.posxTL + app.blockLength
         self.posyTR = self.posyTL
-
         #Bottom Left of Block (x, y)
         self.posxBL = self.posxTL
         self.posyBL = self.posyTL + app.blockLength
-
         #Bottom Right of Block (x, y)
         self.posxBR = self.posxTL + app.blockLength
         self.posyBR = self.posyTL + app.blockLength
-
         #Center of Block (x, y)
         self.centerX = int(self.posxTL + (0.5*app.blockLength))
         self.centerY = int(self.posyTL + (0.5*app.blockLength))
-
         #Assign blockType attributes
         #blocks
         if self.blockType == 'grass':
@@ -69,19 +62,15 @@ def generateChunk(chunk):
     for block in chunk:
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
                  fill = block.color, border = 'black', opacity = 50)
-
 # #TODO: REMOVE AFTER TESTING
 # blockcol = set()
 # for y in range(0, app.totalBlocksInCol) :
 #     blockcol.add(Block(0, y, 'dirt'))
-
-
 def hasMissingNeighbors(chunk, targetBlock):
     x = targetBlock.xIndex
     y = targetBlock.yIndex
     neighbors = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
     neighborCount = 0
-
     for block in chunk:
         for neighbor in neighbors:
             if block.xIndex == neighbor[0] and block.yIndex == neighbor[1]:
@@ -98,23 +87,22 @@ def getCollidableBlocks(chunk):
             collidableBlocks.add(block)
     return collidableBlocks
 
-
-
 def getGroundHeightIndex(chunk):
     for block in chunk:
         if block.blockType == 'grass':
             return block.yIndex
+        
+def getGroundHeightPixels(chunk):
+    for block in chunk:
+        if block.blockType == 'grass':
+            return block.posyTL-app.blockLength
 
-# def getGroundHeightPixels(chunk):
-#     for block in chunk:
-#         if block.blockType == 'grass':
-#             return block.posyTL-app.blockLength
 
 #----HOLE CLASS----
 class Hole:
     def __init__(self, chunk):
         groundHeightIndex = getGroundHeightIndex(chunk)
-        self.xIndex = random.randint(3, app.totalBlocksInRow-5) #1 - total blocks in row
+        self.xIndex = random.randint(6, app.totalBlocksInRow-5) #6 - total blocks in row
         self.length = random.randint(1, 5) #1 - total blocks in row
         self.yIndex = groundHeightIndex
         self.height = random.randint(1, groundHeightIndex) #1 - ground height
@@ -132,8 +120,6 @@ def addHolesToChunks(chunk):
     blocksToRemove = set()
     blocksToAdd = set()
     numberOfHoles = random.choices([1, 2, 3, 4], [20, 30, 40, 10])[0]
-    print(numberOfHoles)
-
     holes = []
     for num in range(numberOfHoles):
         hole = Hole(chunk)
@@ -152,12 +138,10 @@ def addHolesToChunks(chunk):
         #spawn ooze monster at bottom of hole
         elif hole.itemBottom == 'ooze':
             blocksToAdd.add(Block(hole.itemXIndex, hole.yIndex - hole.height, 'ooze'))
-
         #create platform
         if hole.hasPlatform:
             for i in range(hole.length+1):
                 blocksToAdd.add(Block(hole.xIndex + i, hole.yIndex + hole.platformHeight, 'platform'))
-
             #spawn smog monster on platform
             if str(hole.itemPlatform) == 'smog':
                 blocksToAdd.add(Block(hole.itemXIndex, hole.yIndex + hole.platformHeight + 1, 'smog'))
@@ -169,23 +153,19 @@ def addHolesToChunks(chunk):
             #spawn invincibility powerup on platform
             elif hole.itemPlatform == 'invincibility':
                 blocksToAdd.add(Block(hole.itemXIndex, hole.yIndex + hole.platformHeight + 1, 'invincibility'))
-
+    
     newChunk = (chunk-blocksToRemove) | blocksToAdd
-    return newChunk
+    return newChunk, holes
 
 def findOverlappingBounds(holes):
     # Finds overlapping bounds for holes, returning the overall bounds
-
     # Sort holes based on xIndex
     sortedHoles = sorted(holes, key=lambda hole: hole.xIndex)
-
     # Initialize variables
     start = sortedHoles[0].xIndex
     end = sortedHoles[0].xIndex + sortedHoles[0].length
-
     # Lists to store  results
     overlappingBounds = []
-
     # Iterate through sorted holes to find the overlapping bounds
     for hole in sortedHoles[1:]:
         if hole.xIndex <= end:  # Overlapping holes
@@ -194,16 +174,14 @@ def findOverlappingBounds(holes):
             overlappingBounds.append((start, end))
             start = hole.xIndex
             end = hole.xIndex + hole.length
-
     # Add the last set of overlapping bounds
     overlappingBounds.append((start, end))
     
     return overlappingBounds
 
-def isChunkBeatable(chunk, holes):
+def isChunkBeatable(holes):
     #chunk is a set, holes is a list
     holeBounds = findOverlappingBounds(holes)
-
     for hole in holes:
         # Hole has a platform
         if hole.hasPlatform:
@@ -212,7 +190,6 @@ def isChunkBeatable(chunk, holes):
                 return False
             # Player CAN jump onto platform
             else: return True
-
         # Hole has NO platform
         else:
             for x, y in holeBounds:
@@ -225,10 +202,14 @@ def isChunkBeatable(chunk, holes):
                 # Player can jump over hole
                 else: return True
         
-
 def generateLevel(defaultChunk):
-    
-    pass
+    isNotBeatable = True
+    while isNotBeatable:
+        chunkLvl, chunkLvlHoles = addHolesToChunks(defaultChunk)
+        if isChunkBeatable(chunkLvlHoles):
+            isNotBeatable = False
+            break
+    return chunkLvl
 
 #---CHUNKS---
 defaultChunk = (
@@ -238,9 +219,8 @@ defaultChunk = (
             createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
             createBlockRow(0, app.totalBlocksInRow, 0, 'dirt')) 
 
-chunk1 = addHolesToChunks(defaultChunk)
-chunk1Collidable = getCollidableBlocks(chunk1)
-# defaultChunk1Collidable = createBlockRow(0, app.totalBlocksInRow, 4, 'grass')
+
+
 
 def sidescrolling(offset, chunk, x):
     # canSideScroll = True
@@ -259,7 +239,5 @@ def sidescrolling(offset, chunk, x):
     # if -10000 <= offset <= 50000:
     for block in chunk:
         block.posxTL += x
-        # print(block.posxTL)
-        offset -= x/30
-    return offset
-    
+            # offset -= x
+    # return offset
