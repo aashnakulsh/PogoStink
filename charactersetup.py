@@ -1,145 +1,153 @@
 from cmu_graphics import *
-from levelsetup2 import *
+from levelsetup import *
 from PIL import Image, ImageDraw
 import math    
 
 #Player class
 class Player():
-    def __init__(self, cx, cy):
+    def __init__(self, centerX, centerY):
         self.lives = 3
-        self.width = 50
-        self.height = 50
+        self.width = 35
+        self.height = 60
 
         #POSITIONS
-
-        self.cx = cx
-        self.cy = cy
+        self.cx = centerX
+        self.cy = centerY
         
-        
-        
-        # self.posxTL = centerX - (0.5*self.width)
-        # self.posyTL = centerY - (0.5*self.height)
-
-        # self.posxTR = self.posxTL + self.width
-        # self.posyTR = self.posyTL
-
-        # self.posxBL = self.posxTL
-        # self.posyBL = self.posyTL + self.height
-
-        # self.posxBR = self.posxTL + self.width
-        # self.posyBR = self.posyTL + self.height
-
-
         self.degrees = 0
+
+        playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
+        for vertex in range(len(playerVertices)):
+            playerVertices[vertex][0] += self.width/2
+            playerVertices[vertex][1] += self.height/2
+        (self.posxTL, self.posyTL) = playerVertices[0]
+        (self.posxTR, self.posyTR) = playerVertices[1]
+        (self.posxBR, self.posyBR) = playerVertices[2]
+        (self.posxBL, self.posyBL) = playerVertices[3]
 
         self.velocityX = 0 # Horizontal velocity
         self.velocityY = 0 # Upwards velocity
         self.gravity = 1
-
 
         #TODO: get apperance right!
         #from F23_Demos for images (makeNewImages.py)
         backgroundColor = (0, 255, 255) # cyan
         self.image = Image.new('RGB', (self.width, self.height), 
                                backgroundColor)
-
+        
     def draw(self):
         #from F23_Demos for images (makeNewImages.py)
-        drawImage(CMUImage(self.image), self.cx, self.cy, 
+        drawImage(CMUImage(self.image), self.posxTL, self.posyTL, 
                   rotateAngle = self.degrees)
-        print(self.posxTL, self.posyTL)
-
+        # print(self.posxTL, self.posyTL)
     
+    def updatePlayerPositions(self):
+        playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
+        for vertex in range(len(playerVertices)):
+            playerVertices[vertex][0] += self.width/2
+            playerVertices[vertex][1] += self.height/2
+        (self.posxTL, self.posyTL) = playerVertices[0]
+        (self.posxTR, self.posyTR) = playerVertices[1]
+        (self.posxBR, self.posyBR) = playerVertices[2]
+        (self.posxBL, self.posyBL) = playerVertices[3]
+
     def jumpOnPogoStick(self):
-        jumpHeight = -30
+        # jumpHeight = -30
 
         #give player 30 pixels (between ground and player bottom) 
         # of room to press space in
-        if getGroundHeightPixels(app.chunk) - self.cy < 30:
+        # if getGroundHeightPixels(app.chunk) - self.cy < 30:
+        if app.groundHeight - self.cy < 90:
+            # print(app.groundHeight - self.cy)
+            # self.centerX += jumpHeight*math.cos(math.radians(self.degrees))
+            # self.centerY -= jumpHeight*math.sin(math.radians(self.degrees))
+            
+            self.velocityY = -30*math.cos(math.radians(self.degrees)) # Set initial upwards velocity
+            self.velocityX = -30*math.sin(math.radians(self.degrees))
 
-            self.cx += jumpHeight*math.cos(math.radians(self.degrees))
-            self.cy -= jumpHeight*math.sin(math.radians(self.degrees))
-            self.velocityY = -15 # Set initial upwards velocity
-            self.velocityX = -15
-
-            # self.posxTL -= dx
-            # self.posy += dy
-
-            # app.currentTime = 0
+            # self.velocityY = -30
+            # self.centerX += -15 
 
     def step(self):
-        for block in app.chunk:
+        #using Collision to find groundHeight at any moment
+        # print(self.posyBR) COLLISION DEBUGGING
+        for block in app.chunkCollidable:
+            # print(block.posyTR) COLLISION DEBUGGING
+            break
+        for block in app.chunkCollidable:
             if isCollided(self, block):
-                print("k")
-
-        self.velocityY += self.gravity
+                app.groundHeight = block.posyTL
+                # print('aiwehgoaiwheg', app.groundHeight) COLLISION DEBUGGING
+                # print(block.posyTR == app.groundHeight) COLLISION DEBUGGING
+                # print(app.groundHeight)
+                # self.cy = self.cy-(self.posyBL-app.groundHeight)
+                
+                # If the character has hit the ground, then rebound bounce
+                self.velocityY=-15
         
-        # If the character has hit the ground, then rebound bounce
-        if self.cy >= getGroundHeightPixels(app.chunk):
-            self.velocityY = -10
+        self.velocityX = self.velocityX*.95
+
+        # if self.posyBL >= app.groundHeight or self.posyBR >= app.groundHeight:
+        #     # print(self.posyBL, app.groundHeight, self.posyBL-app.groundHeight, self.cy,self.cy-(self.posyBL-app.groundHeight))
+        #     self.cy = self.cy-(self.posyBL-app.groundHeight)
+            # self.cy = app.groundHeight-self.width
+            # self.velocityY = -10
+
+        # if self.posyBL >= app.groundHeight:
+            # print(self.posxBL)
+
+        # UNCOMMENT LTR
+        self.velocityY += self.gravity
         self.cy += self.velocityY
 
+        # self.velocityX += .1
+        self.cx -= self.velocityX
+
+        #update player corner coordinates (positions)
+        self.updatePlayerPositions()
+        
         #TODO: using collision function, check how much player goes through ground by then adjust player pos accordingly (subtract)
         #TODO: add thing ot make sure character stays within bounds
-      
-    @staticmethod
-    def findRotatedCoords(posx, posy, cx, cy, angle):
-        xcoord = (posx-cx) * math.cos(math.radians(angle))- (posy-cy)*math.sin(math.radians(angle)) + cx
-        ycoord = (posy-cy) * math.sin(math.radians(angle))+ (posy-cy)*math.cos(math.radians(angle)) + cy
-        return xcoord, ycoord
     
     def rotate(self, deg):
         #update player appearance
-        if ((-90 < app.player.degrees < 90) or
-            (app.player.degrees == 90 and deg < 0) or
-            (app.player.degrees == -90 and deg > 0)):
-            app.player.degrees += deg
+        if ((-45 < self.degrees < 45) or
+            (self.degrees == 45 and deg < 0) or
+            (self.degrees == -45 and deg > 0)):
+            self.degrees += deg
 
-            #update player corner coordinates (positions)
-            self.posxTL, self.posyTL = Player.findRotatedCoords(self.posxTL, self.posyTL, self.cx, self.cy, deg)
-            self.posxBL, self.posyBL = Player.findRotatedCoords(self.posxBL, self.posxBL, self.cx, self.cy, deg)
-            self.posxBR, self.posyBR = Player.findRotatedCoords(self.posxBR, self.posxBR, self.cx, self.cy, deg)
-            self.posxTR, self.posyTR = Player.findRotatedCoords(self.posxTR, self.posyTR, self.cx, self.cy, deg)
-        
-
-
-#Calculates change in x and y, given an angle, initial velocity, and time
-def calculateProjectileMotion(angle, velocity, time):
-    # Convert angle to radians
-    gravity = 9.8
-    angleInRadians = math.radians(angle)
-
-    # Calculate horizontal/vertical components of velocity
-    velocityX = velocity * math.cos(angleInRadians)
-    velocityY = velocity * math.sin(angleInRadians)
-
-    # Calculate change in x/y coords
-    dx = velocityX * time
-    dy = velocityY * time - .5 * gravity * time**2
-
-    return dx, dy
-
-def startClock():
-    if app.runClock == True:
-        currentTime +=.1
-    
-    return currentTime
-
-def stopClock(currentTime):
-    app.runClock = False
-    return currentTime
-
+            
+            
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
-def isCollided(block, player):
-    # print(f'1: {player.posxBR >= block.posxTL}')
-    # print(f'2: {block.posxBR >= player.posxTL}')
-    # print(f'3: {player.posyBR >= block.posyTL}')
-    # print(f'4: {block.posyBR >= player.posyTL}')
-    # print((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
-    #     (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL))
-    if ((player.posxBR >= block.posxTL) and (block.posxBR >= player.posxTL) and
-        (player.posyBR >= block.posyTL) and (block.posyBR >= player.posyTL)):
+def isCollided(obj1, obj2):
+    if ((obj1.posxBR >= obj2.posxTL) and (obj2.posxBR >= obj1.posxTL) and
+        (obj1.posyBR >= obj2.posyTL) and (obj2.posyBR >= obj1.posyTL)):
         return True
     else:
         return False
+
+def rotatePoint(point, angle):
+        angle = abs(angle)
+        angleRad = math.radians(angle)
+        x, y = point
+        rotatedX = x * math.cos(angleRad) - y * math.sin(angleRad)
+        rotatedY = x * math.sin(angleRad) + y * math.cos(angleRad)
+        return [rotatedX, rotatedY]
+
+def calculateRotatedRectangleVertices( center, width, height, angle):
+    angle = abs(angle)
+    halfWidth = width / 2
+    halfHeight = height / 2
+    unrotatedCorners = [
+        [-halfWidth, -halfHeight],  
+        [halfWidth, -halfHeight],   
+        [halfWidth, halfHeight],    
+        [-halfWidth, halfHeight]    
+    ]
+    rotatedCorners = [rotatePoint(point, angle) for point in unrotatedCorners]
+    rotatedVertices = [[point[0] + center[0], point[1] + center[1]] for point in rotatedCorners]
     
+    # for coord in range(len(rotatedVertices)):
+    #     rotatedVertices[coord][0] += halfWidth
+    #     rotatedVertices[coord][1] += app.player.height/2
+    return rotatedVertices

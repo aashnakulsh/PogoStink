@@ -1,4 +1,4 @@
-from levelsetup2 import *
+from levelsetup import *
 
 def onAppStart(app):
     app.blockLength = 50

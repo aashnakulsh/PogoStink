@@ -1,8 +1,8 @@
 from cmu_graphics import *
-from levelsetup2 import *
+from levelsetup import *
 from monsters import *
 from powerups import *
-from charactersetup2 import *
+from charactersetup import *
 from PIL import Image, ImageDraw
 
 #TODO: collision, change rotate so that ypos and xpos are changed!!, player movement
