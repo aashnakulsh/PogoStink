@@ -119,8 +119,8 @@ class Player():
         # WIND??
         # self.velocityX += .1
 
-        self.cx -= self.velocityX
-
+        # self.cx -= self.velocityX
+        app.offset = sidescrolling(app.offset, app.chunk, self.velocityX)
         #update player corner coordinates (positions)
         self.updatePlayerPositions()
         

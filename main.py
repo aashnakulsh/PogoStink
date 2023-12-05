@@ -9,8 +9,9 @@ def onAppStart(app):
     app.gravity = 1
     app.chunk = chunk1
     app.chunkCollidable = chunk1Collidable
-    app.player = Player(100, 100)
+    app.player = Player(200, 100)
     app.stepsPerSecond = 50
+    app.offset = 0
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
@@ -32,6 +33,10 @@ def game_onKeyHold(app, key):
         app.player.rotate(3)
     if 'left' in key:
         app.player.rotate(-3)
+    # if 'a' in key:
+    #     sidescrolling(app.chunk, 5)
+    # if 'd' in key:
+    #     sidescrolling(app.chunk, -5)
     if 'y' in key:
         print(app.player.posxTL, app.player.posyTL)
 
@@ -39,6 +44,7 @@ def game_onKeyHold(app, key):
 
 def game_onStep(app):
     app.player.step()
+    print(app.offset)
 
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~

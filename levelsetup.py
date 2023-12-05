@@ -241,3 +241,25 @@ defaultChunk = (
 chunk1 = addHolesToChunks(defaultChunk)
 chunk1Collidable = getCollidableBlocks(chunk1)
 # defaultChunk1Collidable = createBlockRow(0, app.totalBlocksInRow, 4, 'grass')
+
+def sidescrolling(offset, chunk, x):
+    # canSideScroll = True
+    # for block in chunk:
+    #     # Left Bound
+    #     if block.xIndex == 0:
+    #         if block.posxTL >= 0:
+    #             canSideScroll == False
+    #             break
+    #     if block.xIndex == 29:
+    #         if block.posxBR <= 4000:
+    #             canSideScroll == False
+    #             break
+
+    #AASHNA: THIS IS BORKENNNN FIX SIDESCROLLIGN
+    if -10000 <= offset <= 50000:
+        for block in chunk:
+            block.posxTL += x
+            offset -= x
+    return offset
+
+    
