@@ -8,26 +8,38 @@ from PIL import Image, ImageDraw
 #TODO: collision, change rotate so that ypos and xpos are changed!!, player movement
 def onAppStart(app):
     app.gravity = 1
-    app.chunk = defaultChunk1
+    app.chunk = addHolesToChunks(defaultChunk1)
     app.chunkCollidable = defaultChunk1Collidable
     # print(createRandomHoles(app.chunk))
     # print(getGroundHeightIndex(app.chunk))
     # print(getGroundHeightPixels(app.chunk))
-    app.player = Player(app.width//2, 50)
+    app.player = Player(25, 25)
+    # app.stepsPerSecond = 5
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_redrawAll(app):
+    # print(f'TL: {app.player.posxTL, app.player.posyTL}')
+    # print(f'TR: {app.player.posxTR, app.player.posyTR}')
+    # print(f'BR: {app.player.posxBR, app.player.posyBR}')
+    # print(f'BL: {app.player.posxBL, app.player.posyBL}')
+    # print(f'C : {app.player.cx, app.player.cy}')
+    # print()
+
+
     app.player.draw()
     generateChunk(app.chunk)
-    drawLine(0, 600, app.width, 600, fill = 'red')
+    # drawLine(0, app.groundHeight, app.width, app.groundHeight, fill = 'red')
+    drawLine(0, app.groundHeight+(app.blockLength/2), app.width, app.groundHeight+app.blockLength/2, fill = 'blue')
 
     #TODO: delete later!
     playerVertices = calculateRotatedRectangleVertices([app.player.cx, app.player.cy], app.player.width, app.player.height, app.player.degrees)
-    drawCircle(int(playerVertices[0][0])+app.player.width/2, int(playerVertices[0][1])+app.player.height/2, 5, fill = 'red')
-    drawCircle(int(playerVertices[1][0])+app.player.width/2, int(playerVertices[1][1])+app.player.height/2, 5, fill = 'pink')
-    drawCircle(int(playerVertices[2][0])+app.player.width/2, int(playerVertices[2][1])+app.player.height/2, 5, fill = 'blue')
-    drawCircle(int(playerVertices[3][0])+app.player.width/2, int(playerVertices[3][1])+app.player.height/2, 5, fill = 'purple')
+    drawCircle(int(playerVertices[0][0]), int(playerVertices[0][1]), 2, fill = 'red') #TL
+    drawCircle(int(playerVertices[1][0]), int(playerVertices[1][1]), 2, fill = 'pink') #TR
+    drawCircle(int(playerVertices[2][0]), int(playerVertices[2][1]), 2, fill = 'blue') #BR
+    drawCircle(int(playerVertices[3][0]), int(playerVertices[3][1]), 2, fill = 'purple') #BL
+    # drawCircle(app.player.cx + app.player.width/2, app.player.cy + app.player.height/2, 3, fill = 'green')
 
+    # print(app.player.posxTL - int(playerVertices[0][0])+app.player.width/2, app.player.posyTL - int(playerVertices[0][1])+app.player.height/2)
 def game_onKeyPress(app, key):
     if key == 'w':
         setActiveScreen('welcome')

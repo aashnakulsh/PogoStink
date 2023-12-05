@@ -86,9 +86,10 @@ def getGroundHeightPixels(chunk):
 class Hole:
     def __init__(self, chunk):
         groundHeightIndex = getGroundHeightIndex(chunk)
-        self.holeXIndex = random.randint(0, app.totalBlocksInRow-1) #0 - total blocks in row
-        self.holeLength = random.randint(0, app.totalBlocksInRow-1) #0 - total blocks in row
-        self.holeHeight = random.randint(0, groundHeightIndex) #0 - ground height
+        self.xIndex = random.randint(1, app.totalBlocksInRow-3) #1 - total blocks in row
+        self.length = random.randint(1, app.totalBlocksInRow-3) #1 - total blocks in row
+        self.yIndex = groundHeightIndex
+        self.height = random.randint(1, groundHeightIndex) #1 - ground height
         self.itemBottomOfHole = random.choices(['garbage', 'ooze', 'empty'], [40, 20, 40])
         self.isPlatform = random.choices([True, False], [70, 30])
         if self.isPlatform:
@@ -99,11 +100,27 @@ class Hole:
             self.itemOnPlatform = None
     # return holeIndex, holeLength, holeHeight, itemBottomOfHole, isPlatform, platformHeight, itemOnPlatform
 
-def addHoleToChunks(chunk):
-    hole = Hole(chunk)
-    # for block in chunk:
-    #     if chunk
-    pass
+def addHolesToChunks(chunk):
+    blocksToRemove = set()
+    blocksToAdd = set()
+    numberOfHoles = random.randint(0, 2)
+    print(numberOfHoles)
+    for num in range(numberOfHoles):
+        hole = Hole(chunk)
+        
+        for block in chunk:
+            if ((hole.xIndex <= block.xIndex <= hole.xIndex + hole.length) and
+                hole.yIndex >= block.yIndex >= hole.yIndex - hole.height):
+                blocksToRemove.add(block)
+
+        if hole.isPlatform:
+            for i in range(hole.length+1):
+                blocksToAdd.add(Block(hole.xIndex + i, hole.yIndex + hole.platformHeight, 'platform'))
+
+    return (chunk-blocksToRemove) | blocksToAdd
 
 def isChunkBeatable(chunk):
+    pass
+
+def generateLevel(defaultChunk):
     pass
