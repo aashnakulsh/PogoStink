@@ -16,18 +16,23 @@ class Block:
         self.blockType = blockType
         
         #POSITIONS
-        self.posxTL = self.xIndex*app.blockLength
+        #Top Left of Block (x, y)
+        self.posxTL = self.xIndex*app.blockLength 
         self.posyTL = app.height - (self.yIndex+1)*app.blockLength
 
+        #Top Right of Block (x, y)
         self.posxTR = self.posxTL + app.blockLength
         self.posyTR = self.posyTL
 
+        #Bottom Left of Block (x, y)
         self.posxBL = self.posxTL
         self.posyBL = self.posyTL + app.blockLength
 
+        #Bottom Right of Block (x, y)
         self.posxBR = self.posxTL + app.blockLength
         self.posyBR = self.posyTL + app.blockLength
 
+        #Center of Block (x, y)
         self.centerX = int(self.posxTL + (0.5*app.blockLength))
         self.centerY = int(self.posyTL + (0.5*app.blockLength))
 
@@ -65,35 +70,47 @@ def generateChunk(chunk):
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
                  fill = block.color, border = 'black', opacity = 50)
 
-#TODO: REMOVE AFTER TESTING
-blockcol = set()
-for y in range(0, app.totalBlocksInCol) :
-    blockcol.add(Block(0, y, 'dirt'))
-defaultChunk1 = (
-            createBlockRow(0, app.totalBlocksInRow, 4, 'grass') |
-            createBlockRow(0, app.totalBlocksInRow, 3, 'dirt') |
-            createBlockRow(0, app.totalBlocksInRow, 2, 'dirt') |
-            createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
-            createBlockRow(0, app.totalBlocksInRow, 0, 'dirt') | blockcol) 
+# #TODO: REMOVE AFTER TESTING
+# blockcol = set()
+# for y in range(0, app.totalBlocksInCol) :
+#     blockcol.add(Block(0, y, 'dirt'))
 
 
-#TODO
+def hasMissingNeighbors(chunk, targetBlock):
+    x = targetBlock.xIndex
+    y = targetBlock.yIndex
+    neighbors = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
+    neighborCount = 0
+
+    for block in chunk:
+        for neighbor in neighbors:
+            if block.xIndex == neighbor[0] and block.yIndex == neighbor[1]:
+                neighborCount += 1
+    
+    if neighborCount == 4:
+        return False
+    return True
+
 def getCollidableBlocks(chunk):
-    pass
+    collidableBlocks = set()
+    for block in chunk:
+        if hasMissingNeighbors(chunk, block): 
+            collidableBlocks.add(block)
+    return collidableBlocks
 
-# defaultChunk1Collidable = getCollidableBlocks(defaultChunk1)
-defaultChunk1Collidable = createBlockRow(0, app.totalBlocksInRow, 4, 'grass')
+
 
 def getGroundHeightIndex(chunk):
     for block in chunk:
         if block.blockType == 'grass':
             return block.yIndex
 
-def getGroundHeightPixels(chunk):
-    for block in chunk:
-        if block.blockType == 'grass':
-            return block.posyTL-app.blockLength
+# def getGroundHeightPixels(chunk):
+#     for block in chunk:
+#         if block.blockType == 'grass':
+#             return block.posyTL-app.blockLength
 
+#----HOLE CLASS----
 class Hole:
     def __init__(self, chunk):
         groundHeightIndex = getGroundHeightIndex(chunk)
@@ -212,3 +229,15 @@ def isChunkBeatable(chunk, holes):
 def generateLevel(defaultChunk):
     
     pass
+
+#---CHUNKS---
+defaultChunk = (
+            createBlockRow(0, app.totalBlocksInRow, 4, 'grass') |
+            createBlockRow(0, app.totalBlocksInRow, 3, 'dirt') |
+            createBlockRow(0, app.totalBlocksInRow, 2, 'dirt') |
+            createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
+            createBlockRow(0, app.totalBlocksInRow, 0, 'dirt')) 
+
+chunk1 = addHolesToChunks(defaultChunk)
+chunk1Collidable = getCollidableBlocks(chunk1)
+# defaultChunk1Collidable = createBlockRow(0, app.totalBlocksInRow, 4, 'grass')

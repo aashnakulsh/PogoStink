@@ -10,25 +10,23 @@ class Player():
         self.width = 35
         self.height = 60
 
-        #POSITIONS
-        self.cx = centerX
-        self.cy = centerY
-        
+        #SETUP MOVEMENT-BASED VARIABLES
         self.degrees = 0
-
-        playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
-        # for vertex in range(len(playerVertices)):
-        #     playerVertices[vertex][0] += self.width/2
-        #     playerVertices[vertex][1] += self.height/2
-        (self.posxTL, self.posyTL) = playerVertices[0]
-        (self.posxTR, self.posyTR) = playerVertices[1]
-        (self.posxBR, self.posyBR) = playerVertices[2]
-        (self.posxBL, self.posyBL) = playerVertices[3]
-
         self.velocityX = 0 # Horizontal velocity
         self.velocityY = 0 # Upwards velocity
         self.gravity = 1
 
+        #SET UP PLAYER POSITIONS
+        self.cx,  self.cy = centerX, centerY    #Center of Player (x, y)
+        
+        playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
+        (self.posxTL, self.posyTL) = playerVertices[0] #Top Left of Player (x, y)
+        (self.posxTR, self.posyTR) = playerVertices[1] #Top Right of Player (x, y)
+        (self.posxBR, self.posyBR) = playerVertices[2] #Bottom Right of Player (x, y)
+        (self.posxBL, self.posyBL) = playerVertices[3] #Bottom Left of Player (x, y)
+
+        
+        #SETUP PLAYER APPERANCE
         #TODO: get apperance right!
         #from F23_Demos for images (makeNewImages.py)
         backgroundColor = (0, 255, 255) # cyan
@@ -36,71 +34,91 @@ class Player():
                                backgroundColor)
         
     def draw(self):
+        #Updates Player appearance
         #from F23_Demos for images (makeNewImages.py)
         drawImage(CMUImage(self.image), self.cx, self.cy, 
                   rotateAngle = self.degrees, align = 'center')
-        # print(self.posxTL, self.posyTL)
     
     def updatePlayerPositions(self):
+        #updates player position
         playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
-        # for vertex in range(len(playerVertices)):
-        #     playerVertices[vertex][0] += self.width/2
-        #     playerVertices[vertex][1] += self.height/2
         (self.posxTL, self.posyTL) = playerVertices[0]
         (self.posxTR, self.posyTR) = playerVertices[1]
         (self.posxBR, self.posyBR) = playerVertices[2]
         (self.posxBL, self.posyBL) = playerVertices[3]
 
     def jumpOnPogoStick(self):
-        # jumpHeight = -30
+        # Imitates pogostick jump
 
-        #give player 30 pixels (between ground and player bottom) 
-        # of room to press space in
-        # if getGroundHeightPixels(app.chunk) - self.cy < 30:
-        if app.groundHeight - self.cy < 90:
-            # print(app.groundHeight - self.cy)
-            # self.centerX += jumpHeight*math.cos(math.radians(self.degrees))
-            # self.centerY -= jumpHeight*math.sin(math.radians(self.degrees))
+        jumpHeight = -30
+
+        #give player 90 pixels margin (between ground and player) 
+        # to press space in
+        for block in app.chunkCollidable:
+            if app.groundHeight - self.cy < 90:
             
-            self.velocityY = -30*math.cos(math.radians(self.degrees)) # Set initial upwards velocity
-            self.velocityX = -30*math.sin(math.radians(self.degrees))
-
-            # self.velocityY = -30
-            # self.centerX += -15 
+                self.velocityY = jumpHeight*math.cos(math.radians(self.degrees))
+                self.velocityX = jumpHeight*math.sin(math.radians(self.degrees))
 
     def step(self):
-        #using Collision to find groundHeight at any moment
-        print(self.posyBR) #COLLISION DEBUGGING
+        margin = 20
         for block in app.chunkCollidable:
-            # print(block.posyTR) #COLLISION DEBUGGING
-            break
-        for block in app.chunkCollidable:
-            if isCollided(self, block):
+            
+            # Player collides with bottom side of block:
+            if self.posyBR <= block.posyTL + margin and isCollided(self, block):
+                print('bottom')
+            # Player colides with top side of block
+            elif self.posyTL >= block.posyBR - margin and isCollided(self, block):
+
+                #LEFT HERE WORKING ON COLLISION
+                #AASHNA YOU ARE WORKING ON GETTING THE PROGRAM TO IDENTIFY
+                #FROM WHICH SIDE THE PLAYER IS COLLIDING INTO OBJECTS WITH
+                #THEN, YOU CAN UPDATE ITS POSITOIN ACCORDINGLY
+                #(RN, WHEN AN PLAYER HITS AN OBJECT'S BOTTOM, IT GOES FLYING
+                # #UP THRU THE BLOCK WHICH IS IMPOSIBLELEL)
+                #ALSO: MAYBE TRY USING IF ELSE STATEMENT SIN TEH ACUTAL 
+                #COLLISION FUNCTION TO SEE IF THAT WORKS BETTER
+                print('top')
+                # blockSet = set()
+                # bestYIndex = None
+                # for block2 in app.chunkCollidable:
+                #     if block2.xIndex == block.xIndex:
+                #         blockSet.add(block2)
+                
+                # for block2 in blockSet:
+                #     if bestYIndex == None:
+                #         bestYIndex = block2
+                #     else:
+                #         if block2.yIndex > bestYIndex.yIndex:
+                #             bestYIndex = block2
+                            
                 app.groundHeight = block.posyTL
-                print('aiwehgoaiwheg', app.groundHeight) #COLLISION DEBUGGING
-                # print(block.posyTR == app.groundHeight) #COLLISION DEBUGGING
-                # print(app.groundHeight)
+                
+                # If Player goes through the ground, update position
                 self.cy = self.cy-(max(self.posyBL, self.posyBR)-app.groundHeight)
+                # self.cx = self.cx-
                 
                 # If the character has hit the ground, then rebound bounce
                 self.velocityY=-15
-        
+
+            # Player collides with right side of block
+            elif self.posxTL >= block.posxBR - margin and isCollided(self, block):
+                print('right')
+                
+            # Player collides with left side of block
+            elif self.posxBR <= block.posxTL + margin and isCollided(self, block):
+                print('left')
+
+
         self.velocityX = self.velocityX*.95
-
-        # if self.posyBL >= app.groundHeight or self.posyBR >= app.groundHeight:
-        #     # print(self.posyBL, app.groundHeight, self.posyBL-app.groundHeight, self.cy,self.cy-(self.posyBL-app.groundHeight))
-        #     self.cy = self.cy-(self.posyBL-app.groundHeight)
-            # self.cy = app.groundHeight-self.width
-            # self.velocityY = -10
-
-        # if self.posyBL >= app.groundHeight:
-            # print(self.posxBL)
 
         # UNCOMMENT LTR
         self.velocityY += self.gravity
         self.cy += self.velocityY
 
+        # WIND??
         # self.velocityX += .1
+
         self.cx -= self.velocityX
 
         #update player corner coordinates (positions)
@@ -147,8 +165,4 @@ def calculateRotatedRectangleVertices( center, width, height, angle):
     ]
     rotatedCorners = [rotatePoint(point, angle) for point in unrotatedCorners]
     rotatedVertices = [[point[0] + center[0], point[1] + center[1]] for point in rotatedCorners]
-    
-    # for coord in range(len(rotatedVertices)):
-    #     rotatedVertices[coord][0] += halfWidth
-    #     rotatedVertices[coord][1] += app.player.height/2
     return rotatedVertices
