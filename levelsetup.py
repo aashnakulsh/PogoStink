@@ -256,10 +256,10 @@ def sidescrolling(offset, chunk, x):
     #             break
 
     #AASHNA: THIS IS BORKENNNN FIX SIDESCROLLIGN
-    if -10000 <= offset <= 50000:
-        for block in chunk:
-            block.posxTL += x
-            offset -= x
+    # if -10000 <= offset <= 50000:
+    for block in chunk:
+        block.posxTL += x
+        # print(block.posxTL)
+        offset -= x/30
     return offset
-
     

@@ -61,14 +61,14 @@ class Player():
                 self.velocityX = jumpHeight*math.sin(math.radians(self.degrees))
 
     def step(self):
-        margin = 20
+        # margin = 20
         for block in app.chunkCollidable:
             
             # Player collides with bottom side of block:
-            if self.posyBR <= block.posyTL + margin and isCollided(self, block):
-                print('bottom')
+            # if self.posyBR <= block.posyTL + margin and isCollided(self, block):
+                # print('bottom')
             # Player colides with top side of block
-            elif self.posyTL >= block.posyBR - margin and isCollided(self, block):
+            # elif self.posyTL >= block.posyBR - margin and isCollided(self, block):
 
                 #LEFT HERE WORKING ON COLLISION
                 #AASHNA YOU ARE WORKING ON GETTING THE PROGRAM TO IDENTIFY
@@ -78,7 +78,7 @@ class Player():
                 # #UP THRU THE BLOCK WHICH IS IMPOSIBLELEL)
                 #ALSO: MAYBE TRY USING IF ELSE STATEMENT SIN TEH ACUTAL 
                 #COLLISION FUNCTION TO SEE IF THAT WORKS BETTER
-                print('top')
+                # print('top')
                 # blockSet = set()
                 # bestYIndex = None
                 # for block2 in app.chunkCollidable:
@@ -92,22 +92,22 @@ class Player():
                 #         if block2.yIndex > bestYIndex.yIndex:
                 #             bestYIndex = block2
                             
-                app.groundHeight = block.posyTL
+            app.groundHeight = block.posyTL
                 
                 # If Player goes through the ground, update position
-                self.cy = self.cy-(max(self.posyBL, self.posyBR)-app.groundHeight)
+            self.cy = self.cy-(max(self.posyBL, self.posyBR)-app.groundHeight)
                 # self.cx = self.cx-
                 
                 # If the character has hit the ground, then rebound bounce
-                self.velocityY=-15
+            self.velocityY=-15
 
             # Player collides with right side of block
-            elif self.posxTL >= block.posxBR - margin and isCollided(self, block):
-                print('right')
+            # elif self.posxTL >= block.posxBR - margin and isCollided(self, block):
+            #     print('right')
                 
-            # Player collides with left side of block
-            elif self.posxBR <= block.posxTL + margin and isCollided(self, block):
-                print('left')
+            # # Player collides with left side of block
+            # elif self.posxBR <= block.posxTL + margin and isCollided(self, block):
+            #     print('left')
 
 
         self.velocityX = self.velocityX*.95

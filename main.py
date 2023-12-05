@@ -17,7 +17,7 @@ def onAppStart(app):
 def game_redrawAll(app):
     app.player.draw()
     generateChunk(app.chunk)
-    drawLine(0, 600, app.width, 600, fill = 'red')
+    # drawLine(0, 600, app.width, 600, fill = 'red')
 
 
 def game_onKeyPress(app, key):
