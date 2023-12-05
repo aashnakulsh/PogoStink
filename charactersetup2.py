@@ -7,8 +7,8 @@ import math
 class Player():
     def __init__(self, centerX, centerY):
         self.lives = 3
-        self.width = 50
-        self.height = 50
+        self.width = 35
+        self.height = 60
 
         #POSITIONS
         self.cx = centerX
@@ -121,10 +121,6 @@ class Player():
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(obj1, obj2):
     if ((obj1.posxBR >= obj2.posxTL) and (obj2.posxBR >= obj1.posxTL) and
-        (obj1.posyBR >= obj2.posyTL) and (obj2.posyBR >= obj1.posyTL)):
-        # print(obj1.posyBR) COLLISION DEBUGGING
-        return True
-    elif ((obj1.posxBL >= obj2.posxTL) and (obj2.posxBR >= obj1.posxTL) and
         (obj1.posyBR >= obj2.posyTL) and (obj2.posyBR >= obj1.posyTL)):
         return True
     else:
