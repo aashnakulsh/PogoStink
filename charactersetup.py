@@ -17,9 +17,9 @@ class Player():
         self.degrees = 0
 
         playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
-        for vertex in range(len(playerVertices)):
-            playerVertices[vertex][0] += self.width/2
-            playerVertices[vertex][1] += self.height/2
+        # for vertex in range(len(playerVertices)):
+        #     playerVertices[vertex][0] += self.width/2
+        #     playerVertices[vertex][1] += self.height/2
         (self.posxTL, self.posyTL) = playerVertices[0]
         (self.posxTR, self.posyTR) = playerVertices[1]
         (self.posxBR, self.posyBR) = playerVertices[2]
@@ -37,15 +37,15 @@ class Player():
         
     def draw(self):
         #from F23_Demos for images (makeNewImages.py)
-        drawImage(CMUImage(self.image), self.posxTL, self.posyTL, 
-                  rotateAngle = self.degrees)
+        drawImage(CMUImage(self.image), self.cx, self.cy, 
+                  rotateAngle = self.degrees, align = 'center')
         # print(self.posxTL, self.posyTL)
     
     def updatePlayerPositions(self):
         playerVertices = calculateRotatedRectangleVertices([self.cx, self.cy], self.width, self.height, self.degrees)
-        for vertex in range(len(playerVertices)):
-            playerVertices[vertex][0] += self.width/2
-            playerVertices[vertex][1] += self.height/2
+        # for vertex in range(len(playerVertices)):
+        #     playerVertices[vertex][0] += self.width/2
+        #     playerVertices[vertex][1] += self.height/2
         (self.posxTL, self.posyTL) = playerVertices[0]
         (self.posxTR, self.posyTR) = playerVertices[1]
         (self.posxBR, self.posyBR) = playerVertices[2]
@@ -70,17 +70,17 @@ class Player():
 
     def step(self):
         #using Collision to find groundHeight at any moment
-        # print(self.posyBR) COLLISION DEBUGGING
+        print(self.posyBR) #COLLISION DEBUGGING
         for block in app.chunkCollidable:
-            # print(block.posyTR) COLLISION DEBUGGING
+            # print(block.posyTR) #COLLISION DEBUGGING
             break
         for block in app.chunkCollidable:
             if isCollided(self, block):
                 app.groundHeight = block.posyTL
-                # print('aiwehgoaiwheg', app.groundHeight) COLLISION DEBUGGING
-                # print(block.posyTR == app.groundHeight) COLLISION DEBUGGING
+                print('aiwehgoaiwheg', app.groundHeight) #COLLISION DEBUGGING
+                # print(block.posyTR == app.groundHeight) #COLLISION DEBUGGING
                 # print(app.groundHeight)
-                # self.cy = self.cy-(self.posyBL-app.groundHeight)
+                self.cy = self.cy-(max(self.posyBL, self.posyBR)-app.groundHeight)
                 
                 # If the character has hit the ground, then rebound bounce
                 self.velocityY=-15
@@ -123,11 +123,13 @@ def isCollided(obj1, obj2):
     if ((obj1.posxBR >= obj2.posxTL) and (obj2.posxBR >= obj1.posxTL) and
         (obj1.posyBR >= obj2.posyTL) and (obj2.posyBR >= obj1.posyTL)):
         return True
+    elif ((obj1.posxBL >= obj2.posxTL) and (obj2.posxBL >= obj1.posxTL) and
+        (obj1.posyBL >= obj2.posyTL) and (obj2.posyBL >= obj1.posyTL)):
+        return True
     else:
         return False
 
 def rotatePoint(point, angle):
-        angle = abs(angle)
         angleRad = math.radians(angle)
         x, y = point
         rotatedX = x * math.cos(angleRad) - y * math.sin(angleRad)
@@ -135,7 +137,6 @@ def rotatePoint(point, angle):
         return [rotatedX, rotatedY]
 
 def calculateRotatedRectangleVertices( center, width, height, angle):
-    angle = abs(angle)
     halfWidth = width / 2
     halfHeight = height / 2
     unrotatedCorners = [
