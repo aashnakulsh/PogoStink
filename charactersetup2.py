@@ -62,8 +62,8 @@ class Player():
             # self.centerX += jumpHeight*math.cos(math.radians(self.degrees))
             # self.centerY -= jumpHeight*math.sin(math.radians(self.degrees))
             
-            self.velocityY = -25*math.cos(math.radians(self.degrees)) # Set initial upwards velocity
-            self.velocityX = -25*math.sin(math.radians(self.degrees))
+            self.velocityY = -30*math.cos(math.radians(self.degrees)) # Set initial upwards velocity
+            self.velocityX = -30*math.sin(math.radians(self.degrees))
 
             # self.velocityY = -30
             # self.centerX += -15 

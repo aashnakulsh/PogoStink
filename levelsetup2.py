@@ -86,14 +86,15 @@ def getGroundHeightPixels(chunk):
 class Hole:
     def __init__(self, chunk):
         groundHeightIndex = getGroundHeightIndex(chunk)
-        self.xIndex = random.randint(1, app.totalBlocksInRow-3) #1 - total blocks in row
-        self.length = random.randint(1, app.totalBlocksInRow-3) #1 - total blocks in row
+        print(app.totalBlocksInRow)
+        self.xIndex = random.randint(3, app.totalBlocksInRow-5) #1 - total blocks in row
+        self.length = random.randint(1, 5) #1 - total blocks in row
         self.yIndex = groundHeightIndex
         self.height = random.randint(1, groundHeightIndex) #1 - ground height
         self.itemBottomOfHole = random.choices(['garbage', 'ooze', 'empty'], [40, 20, 40])
         self.isPlatform = random.choices([True, False], [70, 30])
         if self.isPlatform:
-            self.platformHeight = random.randint(groundHeightIndex, app.totalBlocksInCol-1) #ground height - total blocks in col
+            self.platformHeight = random.randint(groundHeightIndex, groundHeightIndex+3) #ground height - total blocks in col
             self.itemOnPlatform = random.choices(['smog', 'empty', 'life', 'invincibility'], [30, 30, 30, 10])
         else:
             self.platformHeight = None
@@ -103,7 +104,7 @@ class Hole:
 def addHolesToChunks(chunk):
     blocksToRemove = set()
     blocksToAdd = set()
-    numberOfHoles = random.randint(0, 2)
+    numberOfHoles = random.randint(1, 5)
     print(numberOfHoles)
     for num in range(numberOfHoles):
         hole = Hole(chunk)
