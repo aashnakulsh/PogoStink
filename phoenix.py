@@ -59,7 +59,9 @@ class Fireball:
         # Draws fireballs
         drawRect(self.x, self.y, self.fireballSize, self.fireballSize, fill = 'orange')
 
+# Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isBasicCollision(rect1x, rect1y, rect1width, rect1height, rect2x, rect2y, rect2width, rect2height):
+    # Checks if two rectangles intersect
     if(
         rect1x < rect2x + rect2width and
         rect1x + rect1width > rect2x and
