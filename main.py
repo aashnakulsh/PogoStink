@@ -52,6 +52,7 @@ def resetGame(app):
 def game_onAppStart(app):
     # BACKGROUND/IMAGES
     app.backgroundImage = CMUImage(Image.open("assets/skybackground.jpeg"))
+    
     # app.playerSpriteStrip = Image.open('assets/playersprite3.png')
     # app.playerSprites = [ ]
     # for i in range(15):

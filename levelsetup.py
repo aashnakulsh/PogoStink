@@ -1,6 +1,7 @@
 from cmu_graphics import *
 import math
 import random
+from PIL import Image
 
 # Initalizes variables
 app.width = 1450
@@ -48,14 +49,15 @@ class Block:
             self.color = 'gray'
         # Monsters
         elif self.blockType == 'ooze':
-            self.color = 'oliveDrab'
+            self.image = CMUImage(Image.open("assets/ooze.png"))
         elif self.blockType == 'smog':
             self.color = 'black'
         elif self.blockType == 'smogCloud':
             self.color = 'gray'
         # Powerups
         elif self.blockType == 'life':
-            self.color = 'lightCoral'
+            self.image = CMUImage(Image.open("assets/heart.png"))
+
         elif self.blockType == 'invincibility':
             self.color = 'lightSteelBlue'
         # Triggers Game Conditions
@@ -80,9 +82,22 @@ def createBlockCol(startYIndex, stopYIndex, xIndex, step, blockType):
 
 # Draws all bocks in chunk
 def drawChunk(chunk):
+    imagedBlocks = set()
     for block in chunk:
+        if block.blockType == 'life' or block.blockType == 'ooze': 
+            imagedBlocks.add(block)
+
+
+
+    #draw blocks with images powerup
+    for block in imagedBlocks:
+        drawImage(block.image, block.posxTL, block.posyTL, width=app.blockLength,height=app.blockLength)
+    
+    #draw every other block
+    for block in chunk-imagedBlocks:
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
                  fill = block.color, border = 'black')
+
 
 # Finds out if a block is surrounded on all four sides or not
 def hasMissingNeighbors(chunk, targetBlock):
