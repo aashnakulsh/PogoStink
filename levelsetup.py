@@ -45,6 +45,8 @@ class Block:
             self.color = 'oliveDrab'
         elif self.blockType == 'smog':
             self.color = 'black'
+        elif self.blockType == 'smogCloud':
+            self.color = 'gray'
         elif self.blockType == 'phoenix':
             self.color = 'orange'
         #powerups
@@ -52,6 +54,9 @@ class Block:
             self.color = 'lightCoral'
         elif self.blockType == 'invincibility':
             self.color = 'lightSteelBlue'
+        #triggers win condition
+        elif self.blockType == 'winTrigger':
+            self.color = 'paleGoldenrod'
 
 def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
     row = set()
@@ -59,7 +64,13 @@ def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
         row.add(Block(x, yIndex, blockType))
     return row
 
-def generateChunk(chunk):
+def createBlockCol(startYIndex, stopYIndex, xIndex, blockType):
+    col = set()
+    for y in range(startYIndex, stopYIndex + 1):
+        col.add(Block(xIndex, y, blockType))
+    return col
+
+def drawChunk(chunk):
     for block in chunk:
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
                  fill = block.color, border = 'black', opacity = 50)
@@ -166,9 +177,13 @@ def addHolesToChunks(chunk):
     newChunk = (chunk-blocksToRemove) | blocksToAdd
     return newChunk, holes
 
+def removeBlocksFromChunk(chunk, blocksToRemove):
+    return chunk-blocksToRemove
+
 def findOverlappingBounds(holes):
     # Finds overlapping bounds for holes, returning the overall bounds
     # Sort holes based on xIndex
+    #https://stackoverflow.com/questions/8966538/syntax-behind-sortedkey-lambda
     sortedHoles = sorted(holes, key=lambda hole: hole.xIndex)
     # Initialize variables
     start = sortedHoles[0].xIndex
@@ -220,16 +235,30 @@ def generateLevel(defaultChunk):
             break
     return chunkLvl
 
-#---CHUNKS---
+#---CHUNK CREATION---
+
+leftBoundary = set()
+for i in range(-3, 0):
+    leftBoundary |= createBlockCol(0, app.totalBlocksInCol, i, 'garbage')
+
+rightBoundary = set()
+for i in range(1, 3):
+    rightBoundary |= createBlockCol(0, app.totalBlocksInCol, app.totalBlocksInRow+i, 'garbage')
+
+winTrigger = set()
+for i in range(3):
+    winTrigger |= {Block(app.totalBlocksInRow-1, 5+i, 'winTrigger')}
+
 defaultChunk = (
             createBlockRow(0, app.totalBlocksInRow, 4, 'grass') |
             createBlockRow(0, app.totalBlocksInRow, 3, 'dirt') |
             createBlockRow(0, app.totalBlocksInRow, 2, 'dirt') |
             createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
-            createBlockRow(0, app.totalBlocksInRow, 0, 'dirt')) 
+            createBlockRow(0, app.totalBlocksInRow, 0, 'dirt') |
+            leftBoundary | rightBoundary | winTrigger
+            ) 
 
 defaultChunk = addBorderToChunk(defaultChunk)
-
 
 def sidescrolling(offset, chunk, x):
     # canSideScroll = True

@@ -6,9 +6,10 @@ import math
 #Player class
 class Player():
     def __init__(self, centerX, centerY):
-        self.lives = 3
+        self.lives = 0
         self.width = 35
         self.height = 60
+        self.invincible = False
         #SETUP MOVEMENT-BASED VARIABLES
         self.degrees = 0
         self.velocityX = 0 # Horizontal velocity
@@ -85,36 +86,99 @@ class Player():
                 #             bestYIndex = block2
     
     def step(self):
+        blocksToRemove = set()
         for block in app.chunkCollidable:
-            # If player collides with LEFT of platform
-            if (isCollided(self, block)["left"] and 
-                (block.blockType == 'platform')):
-                # self.cx -= (self.posxBR - block.posxTL)
-                self.rotate(-self.degrees)
+            sidesCollided = isCollided(self, block)
+            # # If player collides with LEFT of platform
+            # if (isCollided(self, block)["left"] and 
+            #     (block.blockType == 'platform')):
+            #     # self.cx -= (self.posxBR - block.posxTL)
+            #     self.rotate(-self.degrees*2)
             
-            # If player collides with RIGHT of platform/dirt block
-            elif ((isCollided(self, block)["right"]) and
-                (block.blockType == 'platform')):
-                self.rotate(-self.degrees)
+            # # If player collides with RIGHT of platform/dirt block
+            # elif ((isCollided(self, block)["right"]) and
+            #     (block.blockType == 'platform')):
+            #     self.rotate(-self.degrees*2)
 
             # If player collides with TOP of grass/dirt/platform block
-            elif (isCollided(self, block)["top"] and 
-                  (block.blockType == 'grass' or block.blockType == 'dirt' or
-                   block.blockType == 'platform')):
+            if (sidesCollided["top"]):
                 app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
+                if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
+                    self.velocityY=-15
+
+                # if (block.blockType == 'grass' or block.blockType == 'dirt' or
+                #    block.blockType == 'platform'):
+                       
                 
+                if block.blockType == 'life':
+                    block.color = 'blue'
+                    if self.lives < 5:
+                        self.lives += 5
+
+                if block.blockType == 'smog':
+                    if len(app.smogBlocks) == 0:
+                        app.smogBlocks |= (createBlockRow(0, app.totalBlocksInRow, block.yIndex, 'smogCloud'))
+                    if self.invincible == False:
+                        app.screenOpacity = 100
+                    
+                if block.blockType == 'garbage' or block.blockType == 'ooze':
+                    if self.invincible == False:
+                        self.lives -= 1
+                        self.cx = 100
+                        self.cy = 100
+                    print(block)
+
+
+            if app.screenOpacity > 0:
+                app.screenOpacity = int(app.screenOpacity-.1)
                 # If Player goes through the ground, update position
                 # self.cy = self.cy-(max(self.posyBL, self.posyBR)-app.groundHeight)
                 # self.cx = self.cx-
                 
                 # If the character has hit the ground, then rebound bounce
-                if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
-                    self.velocityY=-15
+                
+            sidesCollided["top"] = False
+            # If player collides with a life powerup, then add a life to player
+            # if ((isCollided(self, block)["top"]) and block.blockType == 'life'):
+            #     self.lives += 1
+            #     # blocksToRemove.add(block)
             
+            # # If player collides with a smog monster, then obstruct user view
+            # if ((isCollided(self, block)["top"] or isCollided(self, block)["left"] or
+            #     isCollided(self, block)["right"] or isCollided(self, block)["bottom"])
+            #     and block.blockType == 'smog'):
+            #     if self.invincible == False:
+            #         app.screenOpacity = 100
+            #     blocksToRemove.add(block)
+            
+            # # Slowly unobstruct user view if smog monster has been triggered
+            # if app.screenOpacity > 0:
+            #     app.screenOpacity -= .01
+
+            # # If player collides with life powerup, player gains a life
+            # if ((isCollided(self, block)["top"] or isCollided(self, block)["left"] or
+            #     isCollided(self, block)["right"] or isCollided(self, block)["bottom"])
+            #     and (block.blockType == 'garbage') or block.blockType == 'ooze'):
+            #     if self.invincible == False:
+            #         self.lives -= 1
+            #         self.cx = 100
+            #         self.cy = 100
+            #     blocksToRemove.add(block)
+
+            # # If player collides with invincibility powerup, player becomes 
+            # # invincible for rest of level
+            # if ((isCollided(self, block)["top"] or isCollided(self, block)["left"] or
+            #     isCollided(self, block)["right"] or isCollided(self, block)["bottom"])
+            #     and (block.blockType == 'invincibility')):
+            #     self.invincible = True
+            #     self.color = 'purple'
+            #     blocksToRemove.add(block)
+
+        removeBlocksFromChunk(app.chunk, blocksToRemove)
             # If player collides with BOTTOM of platform block
-            elif (isCollided(self, block)["bottom"] and block.blockType == 'platform'):
-                # self.cy += block.posyBR - self.posyTL
-                self.velocityY*=-1
+            # elif (isCollided(self, block)["bottom"] and block.blockType == 'platform'):
+            #     # self.cy += block.posyBR - self.posyTL
+            #     self.velocityY*=-1
             
 
             # If player collides with bottom of block
@@ -126,10 +190,10 @@ class Player():
             #     self.velocityX *= -1
             #     print(self.velocityX)
 
-            elif isCollided(self, block)["right"]:
-                print(self.velocityX)
-                self.velocityX *= -1
-                print(self.velocityX)
+            # elif isCollided(self, block)["right"]:
+            #     print(self.velocityX)
+            #     self.velocityX *= -1
+            #     print(self.velocityX)
 
         self.velocityX = self.velocityX*.95
         self.velocityY += self.gravity
@@ -138,7 +202,8 @@ class Player():
         # WIND??
         # self.velocityX += .1
 
-        sidescrolling(app.offset, app.chunk, self.velocityX)
+        if app.sidescroll:
+            sidescrolling(app.offset, app.chunk, self.velocityX)
 
         #update player corner coordinates (positions)
         self.updatePlayerPositions()
@@ -163,24 +228,46 @@ def isCollided(obj1, obj2):
         # return True
         if obj2.posyTL+75 > obj1.posyTL > obj2.posyTL:
             collisionSides["bottom"] = True
-        elif obj2.posyTL-75 < obj1.posyTL < obj2.posyTL:
+        else: 
+            collisionSides["bottom"] = False
+            
+        if obj2.posyTL-75 < obj1.posyTL < obj2.posyTL:
             collisionSides["top"] = True
+        else:
+            collisionSides["top"] = False
+
         if obj2.posxTL-75 < obj1.posxTL < obj2.posxTL:
             collisionSides["right"] = True
-        elif obj2.posxTL+75 > obj1.posxTL > obj2.posxTL:
+        else: 
+            collisionSides["right"] = False
+
+        if obj2.posxTL < obj1.posxTL < obj2.posxTL+75:
             collisionSides["left"] = True
+        else:
+            collisionSides["left"] = False
 
     elif ((obj1.posxBL >= obj2.posxTL) and (obj2.posxBL >= obj1.posxTL) and
         (obj1.posyBL >= obj2.posyTL) and (obj2.posyBL >= obj1.posyTL)):
         # return True
-        if obj1.posyTL > obj2.posyTL:
+        if obj2.posyTL+75 > obj1.posyTL > obj2.posyTL:
             collisionSides["bottom"] = True
-        elif obj1.posyTL < obj2.posyTL:
+        else: 
+            collisionSides["bottom"] = False
+
+        if obj2.posyTL-75 < obj1.posyTL < obj2.posyTL:
             collisionSides["top"] = True
-        if obj1.posxTL < obj2.posxTL:
+        else:
+            collisionSides["top"] = False
+
+        if obj2.posxTL-75 < obj1.posxTL < obj2.posxTL:
             collisionSides["right"] = True
-        elif obj1.posxTL > obj2.posxTL:
+        else: 
+            collisionSides["right"] = False
+
+        if obj2.posxTL+75 > obj1.posxTL > obj2.posxTL:
             collisionSides["left"] = True
+        else:
+            collisionSides["left"] = False
 
     return collisionSides
 
