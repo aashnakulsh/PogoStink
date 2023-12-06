@@ -86,18 +86,21 @@ class Player():
     
     def step(self):
         for block in app.chunkCollidable:
-            # If player collides with LEFT of platform/dirt block
+            # If player collides with LEFT of platform
             if (isCollided(self, block)["left"] and 
-                (block.blockType == 'platform') or block.blockType == 'dirt'):
-                self.cx -= (self.posxBR - block.posxTL)
-                #  print(self.velocityX)
-                #  self.velocityX *= -1
-                
+                (block.blockType == 'platform')):
+                # self.cx -= (self.posxBR - block.posxTL)
+                self.rotate(-self.degrees)
+            
+            # If player collides with RIGHT of platform/dirt block
+            elif ((isCollided(self, block)["right"]) and
+                (block.blockType == 'platform')):
+                self.rotate(-self.degrees)
+
             # If player collides with TOP of grass/dirt/platform block
-            if (isCollided(self, block)["top"] and 
+            elif (isCollided(self, block)["top"] and 
                   (block.blockType == 'grass' or block.blockType == 'dirt' or
                    block.blockType == 'platform')):
-                # app.groundHeight = block.posyTL
                 app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
                 
                 # If Player goes through the ground, update position
@@ -107,9 +110,11 @@ class Player():
                 # If the character has hit the ground, then rebound bounce
                 if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
                     self.velocityY=-15
+            
             # If player collides with BOTTOM of platform block
-            # elif (isCollided(self, block)["bottom"] and block.blockType == 'platform'):
+            elif (isCollided(self, block)["bottom"] and block.blockType == 'platform'):
                 # self.cy += block.posyBR - self.posyTL
+                self.velocityY*=-1
             
 
             # If player collides with bottom of block
