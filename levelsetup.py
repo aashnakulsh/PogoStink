@@ -57,6 +57,9 @@ class Block:
         #triggers win condition
         elif self.blockType == 'winTrigger':
             self.color = 'paleGoldenrod'
+        #triggers lose condition
+        elif self.blockType == 'boundary':
+            self.color = 'purple'
 
 def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
     row = set()
@@ -64,9 +67,9 @@ def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
         row.add(Block(x, yIndex, blockType))
     return row
 
-def createBlockCol(startYIndex, stopYIndex, xIndex, blockType):
+def createBlockCol(startYIndex, stopYIndex, xIndex, step, blockType):
     col = set()
-    for y in range(startYIndex, stopYIndex + 1):
+    for y in range(startYIndex, stopYIndex + 1, step):
         col.add(Block(xIndex, y, blockType))
     return col
 
@@ -239,15 +242,15 @@ def generateLevel(defaultChunk):
 
 leftBoundary = set()
 for i in range(-3, 0):
-    leftBoundary |= createBlockCol(0, app.totalBlocksInCol, i, 'garbage')
+    leftBoundary |= createBlockCol(0, app.totalBlocksInCol, i, 2, 'boundary')
 
 rightBoundary = set()
 for i in range(1, 3):
-    rightBoundary |= createBlockCol(0, app.totalBlocksInCol, app.totalBlocksInRow+i, 'garbage')
+    rightBoundary |= createBlockCol(0, app.totalBlocksInCol, app.totalBlocksInRow+i, 2, 'boundary')
 
 winTrigger = set()
 for i in range(3):
-    winTrigger |= {Block(app.totalBlocksInRow-1, 5+i, 'winTrigger')}
+    winTrigger |= {Block(app.totalBlocksInRow-i-1, 5, 'winTrigger')}
 
 defaultChunk = (
             createBlockRow(0, app.totalBlocksInRow, 4, 'grass') |
@@ -260,22 +263,6 @@ defaultChunk = (
 
 defaultChunk = addBorderToChunk(defaultChunk)
 
-def sidescrolling(offset, chunk, x):
-    # canSideScroll = True
-    # for block in chunk:
-    #     # Left Bound
-    #     if block.xIndex == 0:
-    #         if block.posxTL >= 0:
-    #             canSideScroll == False
-    #             break
-    #     if block.xIndex == 29:
-    #         if block.posxBR <= 4000:
-    #             canSideScroll == False
-    #             break
-
-    #AASHNA: THIS IS BORKENNNN FIX SIDESCROLLIGN
-    # if -10000 <= offset <= 50000:
+def sidescrolling(chunk, x):
     for block in chunk:
         block.posxTL += x
-            # offset -= x
-    # return offset

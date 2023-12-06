@@ -4,7 +4,12 @@ from monsters import *
 from powerups import *
 from charactersetup import *
 from PIL import Image, ImageDraw
+
 def onAppStart(app):
+    pass
+
+#~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
+def game_onAppStart(app):
     app.gravity = 1
     # app.chunk = generateLevel(defaultChunk)
     app.chunk = generateLevel(defaultChunk)
@@ -12,12 +17,12 @@ def onAppStart(app):
     app.player = Player(100, 100)
     app.player = Player(200, 100)
     app.stepsPerSecond = 60
-    app.offset = 0
     app.screenOpacity = 0
     app.smogBlocks = set()
-    app.sidescroll = True
 
-#~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
+    app.winTrigger = False
+    app.loseTrigger = False
+
 def game_redrawAll(app):
     app.player.draw()
     drawLabel(f'{app.player.lives}', 100, 100)
@@ -119,4 +124,4 @@ def gameOverLose_onKeyPress(app, key):
     if key == 'h':
         setActiveScreen('help')
 
-runAppWithScreens(width = app.width, height = app.height, initialScreen='game')
+runAppWithScreens(width = app.width, height = app.height, initialScreen='welcome')
