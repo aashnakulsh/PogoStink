@@ -112,7 +112,6 @@ class Player():
                 # then set win condition to false
                 if block.blockType == 'boundary':
                     app.loseTrigger = True
-        print(app.loseTrigger)
 
         # Slowly unobstruct user view if smog monster has been triggered
         if app.screenOpacity > 0:
@@ -150,27 +149,33 @@ def isCollided(obj1, obj2):
                       "right": False}
     if ((obj1.posxBR >= obj2.posxTL) and (obj2.posxBR >= obj1.posxTL) and
         (obj1.posyBR >= obj2.posyTL) and (obj2.posyBR >= obj1.posyTL)):
-        
         if obj2.posyTL+75 > obj1.posyTL > obj2.posyTL:
             collisionSides["bottom"] = True
+        else: collisionSides["bottom"] = False
         if obj2.posyTL-75 < obj1.posyTL < obj2.posyTL:
             collisionSides["top"] = True
+        else: collisionSides["top"] = False
         if obj2.posxTL-75 < obj1.posxTL < obj2.posxTL:
             collisionSides["right"] = True
-        if obj2.posxTL < obj1.posxTL < obj2.posxTL+75:
+        else: collisionSides["right"] = False
+        if obj2.posxTL+75 > obj1.posxTL > obj2.posxTL :
             collisionSides["left"] = True
+        else: collisionSides["left"] = False
 
     elif ((obj1.posxBL >= obj2.posxTL) and (obj2.posxBL >= obj1.posxTL) and
         (obj1.posyBL >= obj2.posyTL) and (obj2.posyBL >= obj1.posyTL)):
-        
-        if obj2.posyTL+75 > obj1.posyTL > obj2.posyTL:
+        if obj2.posyBR+75 > obj1.posyBR > obj2.posyBR:
             collisionSides["bottom"] = True
-        if obj2.posyTL-75 < obj1.posyTL < obj2.posyTL:
+        else: collisionSides["bottom"] = False
+        if obj2.posyBR-75 < obj1.posyBR < obj2.posyBR:
             collisionSides["top"] = True
-        if obj2.posxTL-75 < obj1.posxTL < obj2.posxTL:
+        else: collisionSides["top"] = False
+        if obj2.posxBR-75 < obj1.posxBR < obj2.posxBR:
             collisionSides["right"] = True
-        if obj2.posxTL+75 > obj1.posxTL > obj2.posxTL:
+        else: collisionSides["right"] = False
+        if obj2.posxBR+75 > obj1.posxBR > obj2.posxBR :
             collisionSides["left"] = True
+        else: collisionSides["left"] = False
 
     return collisionSides
 

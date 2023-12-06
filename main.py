@@ -61,18 +61,12 @@ def game_onStep(app):
 
 #~~~~~~~~~~~~~~~~WELCOME SCREEN~~~~~~~~~~~~~~~~
 def welcome_redrawAll(app):
-    drawLabel("PogoStink", 
-            app.width//2, 
-            app.height//2 - 50, 
-            fill = 'seaGreen', 
-            size = 30, 
-            align = 'center')
+    drawLabel("PogoStink", app.width//2, app.height//2 - 50, fill = 'seaGreen', 
+            size = 30, align = 'center')
     
-    drawLabel("Play to save your friends!", 
-              app.width//2, app.height//2 , 
-              fill = 'mediumSeaGreen', 
-              size = 20, 
-              align = 'center')
+    drawLabel("Play to save your friends!", app.width//2, app.height//2 , 
+              fill = 'mediumSeaGreen', size = 20, align = 'center')
+    
 def welcome_onKeyPress(app, key):
     if key == 'g':
         setActiveScreen('game')
