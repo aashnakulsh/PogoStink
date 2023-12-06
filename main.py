@@ -28,6 +28,7 @@ def resetGame(app):
                 createBlockRow(0, app.totalBlocksInRow, 0, 'dirt') |
                 leftBoundary | rightBoundary | winTrigger
                 ) 
+    
     app.gravity = 1
     app.chunk = generateLevel(defaultChunk)[0]
     app.chunkCollidable = getCollidableBlocks(app.chunk)
@@ -85,6 +86,8 @@ def game_onKeyPress(app, key):
         setActiveScreen('gameOverLose')
     if key == 'p':
         setActiveScreen('gameOverWin')
+    if key == 'r':
+        app.loseTrigger = True
     if key == 'space':
         app.player.jumpOnPogoStick()
 

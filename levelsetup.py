@@ -256,6 +256,9 @@ defaultChunk = (
 
 # Moves every block on screen according to player movements, creating
 # sidescrolling effect  
-def sidescrolling(chunk, x):
+def sidescrolling(chunk, dx, fireballs):
     for block in chunk:
-        block.posxTL += x
+        block.posxTL += dx
+    
+    for fireball in fireballs:
+        fireball.x += dx

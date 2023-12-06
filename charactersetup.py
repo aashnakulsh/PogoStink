@@ -62,79 +62,78 @@ class Player():
                 self.velocityX = jumpHeight*math.sin(math.radians(self.degrees))
     
     def step(self):
-        count = 0
-        if count % 2 == 0:
-            # Finds player's current ground height
-            app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
+        # Finds player's current ground height
+        app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
 
-            for block in app.chunkCollidable:
-                #stores what side of block the collision occured
-                sidesCollided = isCollided(self, block)
+        for block in app.chunkCollidable:
+            #stores what side of block the collision occured
+            sidesCollided = isCollided(self, block)
 
-                # If player collides with TOP of block
-                if (sidesCollided["top"]):
+            # If player collides with TOP of block
+            if (sidesCollided["top"]):
+                
+                # If the character has hit the ground, then rebound bounce
+                if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
+                    self.velocityY=-15
                     
-                    # If the character has hit the ground, then rebound bounce
-                    if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
-                        self.velocityY=-15
-                        
-                    # If player collides with a life powerup, then add a life to player
-                    if block.blockType == 'life':
-                        block.color = 'blue'
-                        if self.lives >= 0:
-                            self.lives = 5
+                # If player collides with a life powerup, then add a life to player
+                if block.blockType == 'life':
+                    block.color = 'blue'
+                    if self.lives >= 0:
+                        self.lives = 5
 
-                    # If player collides with a smog monster, then obstruct user view
-                    if block.blockType == 'smog':
-                        if len(app.smogBlocks) == 0:
-                            app.smogBlocks |= (createBlockRow(0, app.totalBlocksInRow, block.yIndex, 'smogCloud'))
-                        if self.invincible == False:
-                            app.screenOpacity = 100
-                    
-                    # If player collides with garbage of ooze monster, then 
-                    # the player loses a life and respawns at (100, 100)
-                    if block.blockType == 'garbage' or block.blockType == 'ooze':
-                        if self.invincible == False:
-                            self.lives -= 1
-                            self.cx = 100
-                            self.cy = 100
-                    
-                    # If player collides with invincibility powerup, player becomes 
-                    # immune to monsters/negative affects for rest of level
-                    if block.blockType == 'invincibility':
-                        self.invincible = True
-                        self.color = 'purple'
+                # If player collides with a smog monster, then obstruct user view
+                if block.blockType == 'smog':
+                    if len(app.smogBlocks) == 0:
+                        app.smogBlocks |= (createBlockRow(0, app.totalBlocksInRow, block.yIndex, 'smogCloud'))
+                    if self.invincible == False:
+                        app.screenOpacity = 100
+                
+                # If player collides with garbage of ooze monster, then 
+                # the player loses a life and respawns at (100, 100)
+                if block.blockType == 'garbage' or block.blockType == 'ooze':
+                    if self.invincible == False:
+                        self.lives -= 1
+                        self.cx = 100
+                        self.cy = 100
+                
+                # If player collides with invincibility powerup, player becomes 
+                # immune to monsters/negative affects for rest of level
+                if block.blockType == 'invincibility':
+                    self.invincible = True
+                    self.color = 'purple'
 
-                    # If player collides with winTrigger block,
-                    # then set win condition to true
-                    if block.blockType == 'winTrigger':
-                        app.winTrigger = True
-                    
-                    # If player collides with lostTrigger block,
-                    # then set win condition to false
-                    if block.blockType == 'boundary':
-                        app.loseTrigger = True
+                # If player collides with winTrigger block,
+                # then set win condition to true
+                if block.blockType == 'winTrigger':
+                    app.winTrigger = True
+                
+                # If player collides with lostTrigger block,
+                # then set win condition to false
+                if block.blockType == 'boundary':
+                    app.loseTrigger = True
 
-            # Slowly unobstruct user view if smog monster has been triggered
-            if app.screenOpacity > 0:
-                app.screenOpacity = int(app.screenOpacity-.1)
-                    
-            # If player lives becomes negative, trigger game lose condition
-            if self.lives < 0:
-                app.loseTrigger = True
+        # Slowly unobstruct user view if smog monster has been triggered
+        if app.screenOpacity > 0:
+            app.screenOpacity = int(app.screenOpacity-.1)
+                
+        # If player lives becomes negative, trigger game lose condition
+        if self.lives < 0:
+            app.loseTrigger = True
 
-            # Player Movement
-            self.velocityX = self.velocityX*.95
-            self.velocityY += self.gravity
-            if self.cy < app.groundHeight:
-                self.cy += self.velocityY
+        # Player Movement
+        self.velocityX = self.velocityX*.95
+        self.velocityY += self.gravity
+        if self.cy < app.groundHeight:
+            self.cy += self.velocityY
 
-            # Sidescroll
-            sidescrolling(app.chunk, self.velocityX)
+        # Sidescroll
+        sidescrolling(app.chunk, self.velocityX, app.phoenix.fireballs)
 
-            #update player corner coordinates (positions)
-            self.updatePlayerPositions()
-        count+= 1
+        #update player corner coordinates (positions)
+        self.updatePlayerPositions()
+
+        
     # Update player appearance based on angle input
     def rotate(self, deg):
         if ((-45 < self.degrees < 45) or
