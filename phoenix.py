@@ -69,6 +69,7 @@ class Fireball:
         self.velocityY = self.fireballSpeed * math.sin(self.angle)
 
         # Sprites
+        #https://tenor.com/view/fire-fireball-8bit-gif-14681886
         spritestrip = Image.open('assets/fireballSprites.png')
         self.sprites = [ ]
         for i in range(1):

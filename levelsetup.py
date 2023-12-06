@@ -46,23 +46,29 @@ class Block:
         elif self.blockType == 'platform':
             self.color = 'purple'
         elif self.blockType == 'garbage':
-            self.color = 'gray'
+            #https://www.washingtonpost.com/dc-md-va/interactive/2022/rats-quiz-facts/
+            self.image = CMUImage(Image.open("assets/trash.png"))
         # Monsters
         elif self.blockType == 'ooze':
+            #https://www.pinterest.com/pin/851039660839154523/
             self.image = CMUImage(Image.open("assets/ooze.png"))
         elif self.blockType == 'smog':
-            self.color = 'black'
+            #https://www.vecteezy.com/png/27951109-pixel-art-8bit-cloud
+            self.image = CMUImage(Image.open("assets/smog.png"))
         elif self.blockType == 'smogCloud':
-            self.color = 'gray'
+            #https://opengameart.org/content/clouds-and-gust
+            self.image = CMUImage(Image.open("assets/smogCloud.png"))
         # Powerups
         elif self.blockType == 'life':
+            #https://tenor.com/search/pixel-heart-gifs
             self.image = CMUImage(Image.open("assets/heart.png"))
-
         elif self.blockType == 'invincibility':
-            self.color = 'lightSteelBlue'
+            #https://fantendo.fandom.com/wiki/Super_Star
+            self.image = CMUImage(Image.open("assets/star.png"))
         # Triggers Game Conditions
         elif self.blockType == 'winTrigger':
-            self.color = 'paleGoldenrod'
+            #https://www.redguides.com/community/threads/3rd-annual-everquest-software-awards-win-krono-prizes-for-voting.76192/
+            self.image = CMUImage(Image.open("assets/trophy.png"))
         elif self.blockType == 'boundary':
             self.color = 'purple'
 
@@ -84,7 +90,10 @@ def createBlockCol(startYIndex, stopYIndex, xIndex, step, blockType):
 def drawChunk(chunk):
     imagedBlocks = set()
     for block in chunk:
-        if block.blockType == 'life' or block.blockType == 'ooze': 
+        if (block.blockType == 'life' or block.blockType == 'boundary' or
+            block.blockType == 'smog' or block.blockType == 'smogCloud' or
+            block.blockType == 'winTrigger' or block.blockType == 'garbage' or
+            block.blockType == 'invincibility' or block.blockType == 'ooze'): 
             imagedBlocks.add(block)
 
 
