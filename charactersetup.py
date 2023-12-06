@@ -1,12 +1,12 @@
 from cmu_graphics import *
 from levelsetup import *
-from PIL import Image, ImageDraw
+from PIL import Image 
 import math    
 
 #----PLAYER CLASS----
-class Player():
+class Player:
     def __init__(self, centerX, centerY):
-        self.lives = 0
+        self.lives = 3
         self.width = 35
         self.height = 60
         self.invincible = False
@@ -31,12 +31,8 @@ class Player():
         (self.posxBL, self.posyBL) = playerVertices[3] # Bottom Left of Player (x, y)
         
         # SETUP PLAYER APPERANCE
-        # TODO: get apperance right!
-        # From F23_Demos for images (makeNewImages.py)
-        # backgroundColor = (0, 255, 255) # cyan
-        # self.image = Image.new('RGB', (self.width, self.height), 
-        #                        backgroundColor)
-
+        # https://www.deviantart.com/cyberguy64/art/Pogo-Knight-Animated-Fighting-521777642
+        # From F23_Demos for sprites (sprites.py)
         self.spritestrip = Image.open('assets/playersprite3.png')
         self.sprites = [ ]
         for i in range(15):
@@ -47,9 +43,7 @@ class Player():
         
     def draw(self):
         # Updates player appearance
-        # From F23_Demos for images (makeNewImages.py)
-        # drawImage(CMUImage(self.image), self.cx, self.cy, 
-                #   rotateAngle = self.degrees, align = 'center')
+        # From F23_Demos for sprites (sprites.py)
         sprite = self.sprites[self.spriteCounter]
         drawImage(sprite, self.cx, self.cy,
                   rotateAngle = self.degrees, align = 'center')
@@ -74,7 +68,9 @@ class Player():
                 self.velocityX = jumpHeight*math.sin(math.radians(self.degrees))
     
     def step(self):
+        # From F23_Demos for sprites (sprites.py)
         self.spriteCounter = (1 + self.spriteCounter) % len(self.sprites)
+        
         # Finds player's current ground height
         app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
 

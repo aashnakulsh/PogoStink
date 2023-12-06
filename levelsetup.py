@@ -48,30 +48,38 @@ class Block:
         elif self.blockType == 'garbage':
             #https://www.washingtonpost.com/dc-md-va/interactive/2022/rats-quiz-facts/
             self.image = CMUImage(Image.open("assets/trash.png"))
+            self.color = 'gray'
         # Monsters
         elif self.blockType == 'ooze':
             #https://www.pinterest.com/pin/851039660839154523/
             self.image = CMUImage(Image.open("assets/ooze.png"))
+            self.color = 'yellowGreen'
         elif self.blockType == 'smog':
             #https://www.vecteezy.com/png/27951109-pixel-art-8bit-cloud
             self.image = CMUImage(Image.open("assets/smog.png"))
+            self.color = 'darkSlateGray'
         elif self.blockType == 'smogCloud':
             #https://opengameart.org/content/clouds-and-gust
             self.image = CMUImage(Image.open("assets/smogCloud.png"))
+            self.color = 'slateGray'
         # Powerups
         elif self.blockType == 'life':
             #https://tenor.com/search/pixel-heart-gifs
             self.image = CMUImage(Image.open("assets/heart.png"))
+            self.color = 'pink'
         elif self.blockType == 'invincibility':
             #https://fantendo.fandom.com/wiki/Super_Star
             self.image = CMUImage(Image.open("assets/star.png"))
+            self.color = 'slateBlue'
         # Triggers Game Conditions
         elif self.blockType == 'winTrigger':
             #https://www.redguides.com/community/threads/3rd-annual-everquest-software-awards-win-krono-prizes-for-voting.76192/
             self.image = CMUImage(Image.open("assets/trophy.png"))
+            self.color = 'gold'
         elif self.blockType == 'boundary':
             #https://www.flaticon.com/free-icon/fence_3468437
             self.image = CMUImage(Image.open("assets/fence.png"))
+            self.color = 'navy'
 
 # Creates a row of blocks as a set
 def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
@@ -89,25 +97,18 @@ def createBlockCol(startYIndex, stopYIndex, xIndex, step, blockType):
 
 # Draws all bocks in chunk
 def drawChunk(chunk):
-    # imagedBlocks = set()
     for block in chunk:
+        # TO FIX PERFORMANCE ISSUES, COMMENT OUT LINES 103-108  
+        #####
         if (block.blockType == 'life' or block.blockType == 'boundary' or
             block.blockType == 'smog' or block.blockType == 'smogCloud' or
             block.blockType == 'winTrigger' or block.blockType == 'garbage' or
             block.blockType == 'invincibility' or block.blockType == 'ooze'): 
-            # imagedBlocks.add(block)
             drawImage(block.image, block.posxTL, block.posyTL, width=app.blockLength,height=app.blockLength)
         else:
+        #####
             drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
                  fill = block.color, border = 'black')
-    #draw blocks with images powerup
-    # for block in imagedBlocks:
-    #     drawImage(block.image, block.posxTL, block.posyTL, width=app.blockLength,height=app.blockLength)
-    
-    # #draw every other block
-    # for block in chunk-imagedBlocks:
-    #     drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
-    #              fill = block.color, border = 'black')
 
 
 # Finds out if a block is surrounded on all four sides or not

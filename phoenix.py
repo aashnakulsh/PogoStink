@@ -12,6 +12,9 @@ class Phoenix:
         self.phoenixSpeed = 5
 
         # Sprites
+
+        #https://gifdb.com/gif/phoenix-pixel-art-19x0p0sly95iicb4.html
+        # From F23_Demos for sprites (sprites.py)
         spritestrip = Image.open('assets/phoenixsprites.png')
         self.sprites = [ ]
         for i in range(9):
@@ -27,10 +30,12 @@ class Phoenix:
     
     def step(self):
         # Sprite
+        # From F23_Demos for sprites (sprites.py)
         self.spriteCounter = (1 + self.spriteCounter) % len(self.sprites)
 
     def draw(self):
         # Sprite
+        # From F23_Demos for sprites (sprites.py)
         sprite = self.sprites[self.spriteCounter]
         drawImage(sprite, self.x, self.y)
 
@@ -69,7 +74,8 @@ class Fireball:
         self.velocityY = self.fireballSpeed * math.sin(self.angle)
 
         # Sprites
-        #https://tenor.com/view/fire-fireball-8bit-gif-14681886
+        # https://tenor.com/view/fire-fireball-8bit-gif-14681886
+        # From F23_Demos for sprites (sprites.py)
         spritestrip = Image.open('assets/fireballSprites.png')
         self.sprites = [ ]
         for i in range(1):
@@ -80,17 +86,16 @@ class Fireball:
     
     def move(self):
         # Sprite
+        # From F23_Demos for sprites (sprites.py)
         self.spriteCounter = (1 + self.spriteCounter) % len(self.sprites)
 
         # Moves fireballs in direction of target
         self.x += self.velocityX
         self.y += self.velocityY
 
-
-
     def draw(self):
         # Draws fireballs
-        # drawRect(self.x, self.y, self.fireballSize, self.fireballSize, fill = 'orange', rotateAngle = self.angle)
+        # From F23_Demos for sprites (sprites.py)
         sprite = self.sprites[self.spriteCounter]
         drawImage(sprite, self.x, self.y)
 
