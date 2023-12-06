@@ -85,22 +85,21 @@ class Player():
                 #             bestYIndex = block2
     
     def step(self):
-        # margin = 20
-        # print(self.isJumping)
-        # print(app.groundHeight)
         for block in app.chunkCollidable:
-            if isCollided(self, block)["top"]:
+            # If player collides with LEFT of platform/dirt block
+            if (isCollided(self, block)["left"] and 
+                (block.blockType == 'platform') or block.blockType == 'dirt'):
+                self.cx -= (self.posxBR - block.posxTL)
+                #  print(self.velocityX)
+                #  self.velocityX *= -1
+                
+            # If player collides with TOP of grass/dirt/platform block
+            if (isCollided(self, block)["top"] and 
+                  (block.blockType == 'grass' or block.blockType == 'dirt' or
+                   block.blockType == 'platform')):
                 # app.groundHeight = block.posyTL
                 app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
-                # getCurrentGroundHeight(self, app.chunkCollidable)
-                # print(getCurrentGroundHeight(self, app.chunkCollidable))
-                # app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
-                # if block.blockType == 'platform' or block.blockType == 'grass':
-                    # app.groundHeight = block.posyTL
                 
-                #TEMP FIX:
-                # app.groundHeight = block.posyTL
-
                 # If Player goes through the ground, update position
                 # self.cy = self.cy-(max(self.posyBL, self.posyBR)-app.groundHeight)
                 # self.cx = self.cx-
@@ -108,7 +107,24 @@ class Player():
                 # If the character has hit the ground, then rebound bounce
                 if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
                     self.velocityY=-15
-            # if isCollided(self, block)["bottom"]
+            # If player collides with BOTTOM of platform block
+            # elif (isCollided(self, block)["bottom"] and block.blockType == 'platform'):
+                # self.cy += block.posyBR - self.posyTL
+            
+
+            # If player collides with bottom of block
+            # elif isCollided(self, block)["bottom"]:
+                # self.velocityY = 15
+            # If player collides with left of block:
+            # elif isCollided(self, block)["left"]:
+            #     print(self.velocityX)
+            #     self.velocityX *= -1
+            #     print(self.velocityX)
+
+            elif isCollided(self, block)["right"]:
+                print(self.velocityX)
+                self.velocityX *= -1
+                print(self.velocityX)
 
         self.velocityX = self.velocityX*.95
         self.velocityY += self.gravity
@@ -135,17 +151,18 @@ class Player():
             
 #Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 def isCollided(obj1, obj2):
+    #obj 1 is player... ob2 is block
     collisionSides = {"top": False, "bottom": False, "left": False, "right": False}
     if ((obj1.posxBR >= obj2.posxTL) and (obj2.posxBR >= obj1.posxTL) and
         (obj1.posyBR >= obj2.posyTL) and (obj2.posyBR >= obj1.posyTL)):
         # return True
-        if obj1.posyTL > obj2.posyTL:
+        if obj2.posyTL+75 > obj1.posyTL > obj2.posyTL:
             collisionSides["bottom"] = True
-        elif obj1.posyTL < obj2.posyTL:
+        elif obj2.posyTL-75 < obj1.posyTL < obj2.posyTL:
             collisionSides["top"] = True
-        elif obj1.posxTL < obj2.posxTL:
+        if obj2.posxTL-75 < obj1.posxTL < obj2.posxTL:
             collisionSides["right"] = True
-        elif obj1.posxTL > obj2.posxTL:
+        elif obj2.posxTL+75 > obj1.posxTL > obj2.posxTL:
             collisionSides["left"] = True
 
     elif ((obj1.posxBL >= obj2.posxTL) and (obj2.posxBL >= obj1.posxTL) and
@@ -155,7 +172,7 @@ def isCollided(obj1, obj2):
             collisionSides["bottom"] = True
         elif obj1.posyTL < obj2.posyTL:
             collisionSides["top"] = True
-        elif obj1.posxTL < obj2.posxTL:
+        if obj1.posxTL < obj2.posxTL:
             collisionSides["right"] = True
         elif obj1.posxTL > obj2.posxTL:
             collisionSides["left"] = True
