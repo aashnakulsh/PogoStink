@@ -70,7 +70,8 @@ class Block:
             #https://www.redguides.com/community/threads/3rd-annual-everquest-software-awards-win-krono-prizes-for-voting.76192/
             self.image = CMUImage(Image.open("assets/trophy.png"))
         elif self.blockType == 'boundary':
-            self.color = 'purple'
+            #https://www.flaticon.com/free-icon/fence_3468437
+            self.image = CMUImage(Image.open("assets/fence.png"))
 
 # Creates a row of blocks as a set
 def createBlockRow(startXIndex, stopXIndex, yIndex, blockType):
