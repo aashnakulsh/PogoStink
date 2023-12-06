@@ -82,7 +82,7 @@ def createBlockCol(startYIndex, stopYIndex, xIndex, step, blockType):
 def drawChunk(chunk):
     for block in chunk:
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
-                 fill = block.color, border = 'black', opacity = 50)
+                 fill = block.color, border = 'black')
 
 # Finds out if a block is surrounded on all four sides or not
 def hasMissingNeighbors(chunk, targetBlock):

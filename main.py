@@ -50,6 +50,9 @@ def resetGame(app):
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_onAppStart(app):
+    # BACKGROUND/IMAGES
+    app.backgroundImage = CMUImage(Image.open("skybackground.jpeg"))
+
     # INITIALIZE VARIABLES
     app.gravity = 1
     app.chunk = generateLevel(defaultChunk)[0]
@@ -70,7 +73,9 @@ def game_onAppStart(app):
     app.phoenix = Phoenix(app.width//2, 50)
 
 def game_redrawAll(app):
-    
+    # BACKGROUND/IMAGES
+    drawImage(app.backgroundImage,0,0,width=app.width,height=app.height)
+
     if app.awakePhoenix: app.phoenix.draw()             # Draw Pheonix
 
     app.player.draw()                                   # Draw Player
