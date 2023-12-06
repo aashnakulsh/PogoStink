@@ -33,15 +33,27 @@ class Player():
         # SETUP PLAYER APPERANCE
         # TODO: get apperance right!
         # From F23_Demos for images (makeNewImages.py)
-        backgroundColor = (0, 255, 255) # cyan
-        self.image = Image.new('RGB', (self.width, self.height), 
-                               backgroundColor)
+        # backgroundColor = (0, 255, 255) # cyan
+        # self.image = Image.new('RGB', (self.width, self.height), 
+        #                        backgroundColor)
+
+        self.spritestrip = Image.open('assets/playersprite3.png')
+        self.sprites = [ ]
+        for i in range(15):
+            sprite = CMUImage(self.spritestrip.crop((164+400*i, 125, 230+400*i, 300)).resize((self.width, self.height)))
+            self.sprites.append(sprite) 
+        self.spriteCounter = 0
+        self.stepsPerSecond = 2
         
     def draw(self):
         # Updates player appearance
         # From F23_Demos for images (makeNewImages.py)
-        drawImage(CMUImage(self.image), self.cx, self.cy, 
+        # drawImage(CMUImage(self.image), self.cx, self.cy, 
+                #   rotateAngle = self.degrees, align = 'center')
+        sprite = self.sprites[self.spriteCounter]
+        drawImage(sprite, self.cx, self.cy,
                   rotateAngle = self.degrees, align = 'center')
+        
     
     def updatePlayerPositions(self):
         # Updates player position
@@ -62,6 +74,7 @@ class Player():
                 self.velocityX = jumpHeight*math.sin(math.radians(self.degrees))
     
     def step(self):
+        self.spriteCounter = (1 + self.spriteCounter) % len(self.sprites)
         # Finds player's current ground height
         app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
 

@@ -52,6 +52,15 @@ def resetGame(app):
 def game_onAppStart(app):
     # BACKGROUND/IMAGES
     app.backgroundImage = CMUImage(Image.open("assets/skybackground.jpeg"))
+    # app.playerSpriteStrip = Image.open('assets/playersprite3.png')
+    # app.playerSprites = [ ]
+    # for i in range(15):
+    #     # Split up the spritestrip into its separate sprites
+    #     # then save them in a list
+    #     sprite = CMUImage(app.playerSpriteStrip.crop((30+400*i, 0, 230+400*i, 300)))
+    #     app.playerSprites.append(sprite)
+    # app.spriteCounter = 0
+    # app.stepsPerSecond = 15
 
     # INITIALIZE VARIABLES
     app.gravity = 1
@@ -75,6 +84,8 @@ def game_onAppStart(app):
 def game_redrawAll(app):
     # BACKGROUND/IMAGES
     drawImage(app.backgroundImage,0,0,width=app.width,height=app.height)
+    # sprite = app.playerSprites[app.spriteCounter]
+    # drawImage(sprite,200, 200)
 
     if app.awakePhoenix: app.phoenix.draw()             # Draw Pheonix
 
@@ -115,9 +126,13 @@ def game_onKeyHold(app, key):
         print(app.player.posxTL, app.player.posyTL)
 
 def game_onStep(app):
-    #Player step
-    app.player.step()
+    # Sprites
+    # app.spriteCounter = (1 + app.spriteCounter) % len(app.playerSprites)
 
+    # Player step
+    app.player.step()
+    if app.awakePhoenix:
+        app.phoenix.step()
     #Pheonix step
     if app.awakePhoenix:
         for fireball in app.phoenix.fireballs:
