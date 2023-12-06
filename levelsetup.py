@@ -3,8 +3,8 @@ import math
 import random
 
 # Initalizes variables
-app.width = 1400
-app.height = 700
+app.width = 1450
+app.height = 800
 app.blockLength = 50
 app.totalBlocksInRow = math.ceil(app.width/app.blockLength)
 app.totalBlocksInCol = math.ceil(app.height/app.blockLength)

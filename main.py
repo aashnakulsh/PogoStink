@@ -5,13 +5,44 @@ from powerups import *
 from charactersetup import *
 from PIL import Image, ImageDraw
 
-def onAppStart(app):
-    pass
+# Resets game's variables
+def resetGame(app):
+    leftBoundary = set()
+    for i in range(-3, 0):
+        leftBoundary |= createBlockCol(0, app.totalBlocksInCol, i, 2, 'boundary')
+
+    rightBoundary = set()
+    for i in range(1, 3):
+        rightBoundary |= createBlockCol(0, app.totalBlocksInCol, app.totalBlocksInRow+i, 2, 'boundary')
+
+    winTrigger = set()
+    for i in range(3):
+        winTrigger |= {Block(app.totalBlocksInRow-i-1, 5, 'winTrigger')}
+        
+    defaultChunk = (
+                createBlockRow(0, app.totalBlocksInRow, 4, 'grass') |
+                createBlockRow(0, app.totalBlocksInRow, 3, 'dirt') |
+                createBlockRow(0, app.totalBlocksInRow, 2, 'dirt') |
+                createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
+                createBlockRow(0, app.totalBlocksInRow, 0, 'dirt') |
+                leftBoundary | rightBoundary | winTrigger
+                ) 
+    app.gravity = 1
+    app.chunk = generateLevel(defaultChunk)
+    app.chunkCollidable = getCollidableBlocks(app.chunk)
+    app.player = Player(100, 100)
+    app.player = Player(200, 100)
+    app.stepsPerSecond = 60
+    app.screenOpacity = 0
+    app.smogBlocks = set()
+
+    app.winTrigger = False
+    app.loseTrigger = False
+
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_onAppStart(app):
     app.gravity = 1
-    # app.chunk = generateLevel(defaultChunk)
     app.chunk = generateLevel(defaultChunk)
     app.chunkCollidable = getCollidableBlocks(app.chunk)
     app.player = Player(100, 100)
@@ -70,6 +101,7 @@ def welcome_redrawAll(app):
 def welcome_onKeyPress(app, key):
     if key == 'g':
         setActiveScreen('game')
+        resetGame(app)
     if key == 'h':
         setActiveScreen('help')
     if key == 'o':
@@ -83,6 +115,7 @@ def help_redrawAll(app):
 def help_onKeyPress(app, key):
     if key == 'g':
         setActiveScreen('game')
+        resetGame(app)
     if key == 'w':
         setActiveScreen('welcome')
     if key == 'o':
@@ -97,6 +130,7 @@ def gameOverWin_redrawAll(app):
 def gameOverWin_onKeyPress(app, key):
     if key == 'g':
         setActiveScreen('game')
+        resetGame(app)
     if key == 'w':
         setActiveScreen('welcome')
     if key == 'o':
@@ -111,6 +145,7 @@ def gameOverLose_redrawAll(app):
 def gameOverLose_onKeyPress(app, key):
     if key == 'g':
         setActiveScreen('game')
+        resetGame(app)
     if key == 'w':
         setActiveScreen('welcome')
     if key == 'p':
@@ -119,3 +154,4 @@ def gameOverLose_onKeyPress(app, key):
         setActiveScreen('help')
 
 runAppWithScreens(width = app.width, height = app.height, initialScreen='welcome')
+
