@@ -89,24 +89,25 @@ def createBlockCol(startYIndex, stopYIndex, xIndex, step, blockType):
 
 # Draws all bocks in chunk
 def drawChunk(chunk):
-    imagedBlocks = set()
+    # imagedBlocks = set()
     for block in chunk:
         if (block.blockType == 'life' or block.blockType == 'boundary' or
             block.blockType == 'smog' or block.blockType == 'smogCloud' or
             block.blockType == 'winTrigger' or block.blockType == 'garbage' or
             block.blockType == 'invincibility' or block.blockType == 'ooze'): 
-            imagedBlocks.add(block)
-
-
-
-    #draw blocks with images powerup
-    for block in imagedBlocks:
-        drawImage(block.image, block.posxTL, block.posyTL, width=app.blockLength,height=app.blockLength)
-    
-    #draw every other block
-    for block in chunk-imagedBlocks:
-        drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
+            # imagedBlocks.add(block)
+            drawImage(block.image, block.posxTL, block.posyTL, width=app.blockLength,height=app.blockLength)
+        else:
+            drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
                  fill = block.color, border = 'black')
+    #draw blocks with images powerup
+    # for block in imagedBlocks:
+    #     drawImage(block.image, block.posxTL, block.posyTL, width=app.blockLength,height=app.blockLength)
+    
+    # #draw every other block
+    # for block in chunk-imagedBlocks:
+    #     drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
+    #              fill = block.color, border = 'black')
 
 
 # Finds out if a block is surrounded on all four sides or not

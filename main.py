@@ -29,12 +29,11 @@ def resetGame(app):
                 leftBoundary | rightBoundary | winTrigger
                 ) 
     
-    app.gravity = 1
     app.chunk = generateLevel(defaultChunk)[0]
     app.chunkCollidable = getCollidableBlocks(app.chunk)
     app.player = Player(100, 100)
     app.player = Player(200, 100)
-    app.stepsPerSecond = 60
+    app.stepsPerSecond = 30
     app.screenOpacity = 0
     app.smogBlocks = set()
 
@@ -52,7 +51,8 @@ def resetGame(app):
 def game_onAppStart(app):
     # BACKGROUND/IMAGES
     app.backgroundImage = CMUImage(Image.open("assets/skybackground.jpeg"))
-    
+    app.smogActivatedImage = CMUImage(Image.open("assets/smogActivated.png"))
+
     # app.playerSpriteStrip = Image.open('assets/playersprite3.png')
     # app.playerSprites = [ ]
     # for i in range(15):
@@ -64,7 +64,6 @@ def game_onAppStart(app):
     # app.stepsPerSecond = 15
 
     # INITIALIZE VARIABLES
-    app.gravity = 1
     app.chunk = generateLevel(defaultChunk)[0]
     app.chunkCollidable = getCollidableBlocks(app.chunk)
     app.player = Player(100, 100)
@@ -85,8 +84,6 @@ def game_onAppStart(app):
 def game_redrawAll(app):
     # BACKGROUND/IMAGES
     drawImage(app.backgroundImage,0,0,width=app.width,height=app.height)
-    # sprite = app.playerSprites[app.spriteCounter]
-    # drawImage(sprite,200, 200)
 
     if app.awakePhoenix: app.phoenix.draw()             # Draw Pheonix
 
@@ -97,8 +94,10 @@ def game_redrawAll(app):
     drawChunk(app.chunk)                                # Draw level
     drawChunk(app.smogBlocks)                           # Draw smogBlocks
 
-    drawRect(0, 0, app.width, app.height, fill = 'black', 
-             opacity = app.screenOpacity)               # Draw Smog
+    drawImage(app.smogActivatedImage, 0, 0, width=app.width, height=app.height, 
+              opacity = app.screenOpacity)
+    # drawRect(0, 0, app.width, app.height, fill = 'black', 
+    #          opacity = app.screenOpacity)               # Draw Smog
     
 def game_onKeyPress(app, key):
     if key == 'w':

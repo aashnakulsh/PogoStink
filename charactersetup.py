@@ -15,7 +15,7 @@ class Player():
         self.degrees = 0
         self.velocityX = 0      # Horizontal velocity
         self.velocityY = 0      # Upwards velocity
-        self.gravity = 1
+        self.gravity = 2
         self.isJumping = False
 
         # SET UP PLAYER POSITIONS
@@ -65,7 +65,7 @@ class Player():
 
     def jumpOnPogoStick(self):
         # Imitates pogostick jump
-        jumpHeight = -30
+        jumpHeight = -40
         for block in app.chunkCollidable:
             # Give player 90 pixels margin (between ground and player) to 
             # press space in.
@@ -87,7 +87,7 @@ class Player():
                 
                 # If the character has hit the ground, then rebound bounce
                 if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
-                    self.velocityY=-15
+                    self.velocityY=-30
                     
                 # If player collides with a life powerup, then add a life to player
                 if block.blockType == 'life':
@@ -100,7 +100,7 @@ class Player():
                     if len(app.smogBlocks) == 0:
                         app.smogBlocks |= (createBlockRow(0, app.totalBlocksInRow, block.yIndex, 'smogCloud'))
                     if self.invincible == False:
-                        app.screenOpacity = 100
+                        app.screenOpacity = 70
                 
                 # If player collides with garbage of ooze monster, then 
                 # the player loses a life and respawns at (100, 100)
@@ -128,7 +128,7 @@ class Player():
 
         # Slowly unobstruct user view if smog monster has been triggered
         if app.screenOpacity > 0:
-            app.screenOpacity = int(app.screenOpacity-.1)
+            app.screenOpacity = int(app.screenOpacity-.5)
                 
         # If player lives becomes negative, trigger game lose condition
         if self.lives < 0:
