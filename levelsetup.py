@@ -10,6 +10,7 @@ app.totalBlocksInRow = math.ceil(app.width/app.blockLength)
 app.totalBlocksInCol = math.ceil(app.height/app.blockLength)
 app.groundHeight = app.height
 
+
 #----BLOCK CLASS----
 class Block:
     def __init__(self, xIndex, yIndex, blockType):
@@ -52,8 +53,6 @@ class Block:
             self.color = 'black'
         elif self.blockType == 'smogCloud':
             self.color = 'gray'
-        elif self.blockType == 'phoenix':
-            self.color = 'orange'
         # Powerups
         elif self.blockType == 'life':
             self.color = 'lightCoral'
@@ -138,6 +137,7 @@ def addHolesToChunks(chunk):
     blocksToAdd = set()
     numberOfHoles = random.choices([1, 2, 3, 4], [20, 30, 40, 10])[0]
     holes = []
+
     for num in range(numberOfHoles):
         hole = Hole(chunk)
         holes.append(hole)
@@ -229,7 +229,8 @@ def generateLevel(defaultChunk):
         if isChunkBeatable(chunkLvlHoles):
             isNotBeatable = False
             break
-    return chunkLvl
+
+    return chunkLvl, len(chunkLvlHoles)
 
 #---CHUNK CREATION---
 leftBoundary = set()

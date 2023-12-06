@@ -3,6 +3,7 @@ from levelsetup import *
 from monsters import *
 from powerups import *
 from charactersetup import *
+from phoenix import *
 from PIL import Image, ImageDraw
 
 # Resets game's variables
@@ -28,7 +29,7 @@ def resetGame(app):
                 leftBoundary | rightBoundary | winTrigger
                 ) 
     app.gravity = 1
-    app.chunk = generateLevel(defaultChunk)
+    app.chunk = generateLevel(defaultChunk)[0]
     app.chunkCollidable = getCollidableBlocks(app.chunk)
     app.player = Player(100, 100)
     app.player = Player(200, 100)
@@ -39,11 +40,17 @@ def resetGame(app):
     app.winTrigger = False
     app.loseTrigger = False
 
+    app.awakePhoenix = False
+    holeNumber = generateLevel(defaultChunk)[1]
+    print(holeNumber)
+    if holeNumber <= 2:
+        app.awakePhoenix = True
+    app.phoenix = Phoenix(app.width//2, 50)
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_onAppStart(app):
     app.gravity = 1
-    app.chunk = generateLevel(defaultChunk)
+    app.chunk = generateLevel(defaultChunk)[0]
     app.chunkCollidable = getCollidableBlocks(app.chunk)
     app.player = Player(100, 100)
     app.player = Player(200, 100)
@@ -54,7 +61,14 @@ def game_onAppStart(app):
     app.winTrigger = False
     app.loseTrigger = False
 
+    app.awakePhoenix = False
+    holeNumber = generateLevel(defaultChunk)[1]
+    if holeNumber <= 2:
+        app.awakePhoenix = True
+    app.phoenix = Phoenix(app.width//2, 50)
+
 def game_redrawAll(app):
+    if app.awakePhoenix: app.phoenix.draw()
     app.player.draw()
     drawLabel(f'{app.player.lives}', 100, 100)
     drawChunk(app.chunk)
@@ -74,6 +88,10 @@ def game_onKeyPress(app, key):
     if key == 'space':
         app.player.jumpOnPogoStick()
 
+        if app.awakePhoenix:
+            targetX, targetY = app.player.cx, app.player.cy
+            app.phoenix.shootFireball(targetX, targetY)
+
 def game_onKeyHold(app, key):
     if 'right' in key:
         app.player.rotate(3)
@@ -84,6 +102,12 @@ def game_onKeyHold(app, key):
 
 def game_onStep(app):
     app.player.step()
+    if app.awakePhoenix:
+        for fireball in app.phoenix.fireballs:
+            fireball.move()
+
+        # Remove fireballs that are out of the screen
+        app.phoenix.fireballs = [fireball for fireball in app.phoenix.fireballs if fireball.x < app.width]
 
     if app.winTrigger == True:
         setActiveScreen('gameOverWin')
