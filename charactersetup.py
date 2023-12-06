@@ -3,6 +3,7 @@ from levelsetup import *
 from PIL import Image, ImageDraw
 import math    
 
+#----PLAYER CLASS----
 class Player():
     def __init__(self, centerX, centerY):
         self.lives = 0
