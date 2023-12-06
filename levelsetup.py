@@ -7,6 +7,7 @@ app.blockLength = 40
 app.totalBlocksInRow = math.ceil(app.width/app.blockLength)
 app.totalBlocksInCol = math.ceil(app.height/app.blockLength)
 app.groundHeight = app.height
+
 class Block:
     def __init__(self, xIndex, yIndex, blockType):
         self.xIndex = xIndex
@@ -62,6 +63,14 @@ def generateChunk(chunk):
     for block in chunk:
         drawRect(block.posxTL, block.posyTL, app.blockLength, app.blockLength, 
                  fill = block.color, border = 'black', opacity = 50)
+
+#TODO: REMOVE AFTER TESTING
+def addBorderToChunk(chunk):
+    # topBorder = createBlockRow(0, app.totalBlocksInRow, app.totalBlocksInCol-1, 'dirt')
+    # leftWall = createBlock
+
+    return chunk 
+
 # #TODO: REMOVE AFTER TESTING
 # blockcol = set()
 # for y in range(0, app.totalBlocksInCol) :
@@ -219,7 +228,7 @@ defaultChunk = (
             createBlockRow(0, app.totalBlocksInRow, 1, 'dirt') |
             createBlockRow(0, app.totalBlocksInRow, 0, 'dirt')) 
 
-
+defaultChunk = addBorderToChunk(defaultChunk)
 
 
 def sidescrolling(offset, chunk, x):

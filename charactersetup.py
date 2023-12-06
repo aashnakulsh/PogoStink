@@ -2,6 +2,7 @@ from cmu_graphics import *
 from levelsetup import *
 from PIL import Image, ImageDraw
 import math    
+
 #Player class
 class Player():
     def __init__(self, centerX, centerY):
@@ -13,6 +14,7 @@ class Player():
         self.velocityX = 0 # Horizontal velocity
         self.velocityY = 0 # Upwards velocity
         self.gravity = 1
+        self.isJumping = False
         #SET UP PLAYER POSITIONS
         self.cx,  self.cy = centerX, centerY    #Center of Player (x, y)
         
@@ -42,6 +44,7 @@ class Player():
         (self.posxTR, self.posyTR) = playerVertices[1]
         (self.posxBR, self.posyBR) = playerVertices[2]
         (self.posxBL, self.posyBL) = playerVertices[3]
+
     def jumpOnPogoStick(self):
         # Imitates pogostick jump
         jumpHeight = -30
@@ -49,10 +52,10 @@ class Player():
         # to press space in
         for block in app.chunkCollidable:
             #UNCOMMENT LTR
-            # if app.groundHeight - self.cy < 90:
+            if app.groundHeight - self.cy < 90:
             
-            self.velocityY = jumpHeight*math.cos(math.radians(self.degrees))
-            self.velocityX = jumpHeight*math.sin(math.radians(self.degrees))
+                self.velocityY = jumpHeight*math.cos(math.radians(self.degrees))
+                self.velocityX = jumpHeight*math.sin(math.radians(self.degrees))
 
     # Player collides with bottom side of block:
             # if self.posyBR <= block.posyTL + margin and isCollided(self, block):
@@ -83,8 +86,13 @@ class Player():
     
     def step(self):
         # margin = 20
+        # print(self.isJumping)
+        # print(app.groundHeight)
         for block in app.chunkCollidable:
             if isCollided(self, block)["top"]:
+                # app.groundHeight = block.posyTL
+                app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
+                # getCurrentGroundHeight(self, app.chunkCollidable)
                 # print(getCurrentGroundHeight(self, app.chunkCollidable))
                 # app.groundHeight = getCurrentGroundHeight(self, app.chunkCollidable)
                 # if block.blockType == 'platform' or block.blockType == 'grass':
@@ -98,25 +106,19 @@ class Player():
                 # self.cx = self.cx-
                 
                 # If the character has hit the ground, then rebound bounce
-                self.velocityY=-15
-                # app.groundHeight = app.height
-            # Player collides with right side of block
-            # elif self.posxTL >= block.posxBR - margin and isCollided(self, block):
-                # print('right')
-                
-            # Player collides with left side of block
-            # elif self.posxBR <= block.posxTL + margin and isCollided(self, block):
-                # print('left')
-        # app.groundHeight = app.height
+                if self.posyBR >= app.groundHeight or self.posyBL >= app.groundHeight:
+                    self.velocityY=-15
+            # if isCollided(self, block)["bottom"]
+
         self.velocityX = self.velocityX*.95
-        # UNCOMMENT LTR
         self.velocityY += self.gravity
-        self.cy += self.velocityY
+        if self.cy < app.groundHeight:
+            self.cy += self.velocityY
         # WIND??
         # self.velocityX += .1
 
-        # self.cx -= self.velocityX
         sidescrolling(app.offset, app.chunk, self.velocityX)
+
         #update player corner coordinates (positions)
         self.updatePlayerPositions()
 
@@ -158,16 +160,15 @@ def isCollided(obj1, obj2):
         elif obj1.posxTL > obj2.posxTL:
             collisionSides["left"] = True
 
-    
     return collisionSides
 
-    
 def rotatePoint(point, angle):
         angleRad = math.radians(angle)
         x, y = point
         rotatedX = x * math.cos(angleRad) - y * math.sin(angleRad)
         rotatedY = x * math.sin(angleRad) + y * math.cos(angleRad)
         return [rotatedX, rotatedY]
+
 def calculateRotatedRectangleVertices( center, width, height, angle):
     halfWidth = width / 2
     halfHeight = height / 2
@@ -181,45 +182,77 @@ def calculateRotatedRectangleVertices( center, width, height, angle):
     rotatedVertices = [[point[0] + center[0], point[1] + center[1]] for point in rotatedCorners]
     return rotatedVertices
 
-# chunk1 = addHolesToChunks(defaultChunk)
-# chunk1Collidable = getCollidableBlocks(chunk1)
-# defaultChunk1Collidable = createBlockRow(0, app.totalBlocksInRow, 4, 'grass')
-# defaultChunk1Collidable = createBlockRow(0, app.totalBlocksInRow, 4, 'grass')
-
-
 def getCurrentGroundHeight(player, chunk):
     #want player.xindex
-    playerX = player.cx//app.blockLength
+    if player.degrees > 0:
+        playerXIndex = {(player.posxTL//app.blockLength)}
+    else:
+        playerXIndex = {(player.posxBR//app.blockLength)}
+
+    # print(playerX) #WORKS
 
     #finds all blocks with same xIndex as player
-    blocksX = set()
+    sameXAsPlayer = []
     for block in chunk:
-        blockX = block.posxTL // app.blockLength
-        if blockX == playerX:
-            blocksX.add(block)
+        blockXIndex = block.posxTL // app.blockLength
+        if blockXIndex in playerXIndex:
+            sameXAsPlayer.append(block)
 
-    #finds y distance between top of block and bottom of player
-    d = dict()
-    for block in blocksX:
-        d[block] = block.posyTL - player.posyBR
+
+    #BLOCKSX WORKS PROPERLY
+    # print(blocksX)
+    # for block in sameXAsPlayer:
+    #     print(block.posxTL // app.blockLength)
+    #     print(playerXIndex == (block.posxTL // app.blockLength))
+
+    # for block in sameXAsPlayer:
+    #     block.color = 'pink'
+
+    # #finds y distance between top of block and bottom of player
+    # d = dict()
+    # for block in blocksX:
+    #     d[block] = block.posyTL - player.posyBR
+
+#RECENT UPDATE
+    distanceList = []
+    for block in sameXAsPlayer:
+        distance = block.posyTL - player.posyBR
+        if distance >= -30:
+            distanceList.append(distance)
+        else: #distance is less than 0, meaning the block is above the player
+            sameXAsPlayer.remove(block)
     
-    # Removes values less than 0
-    toRemove = []
-    for key in d:
-        if d[key] < 0:
-            toRemove.append(key)
+    #WROKS
+    # print(distanceList)
+    # for block in sameXAsPlayer:
+    #     block.color = 'pink'
+##
 
-    for ele in toRemove:
-        del d[ele]
+    # #Finds block with minimum y distance between top of block and player
+    # minval = min(d.values())
+    # groundBlock = None
+    # for key in d:
+    #     if d[key] == minval:
+    #         groundBlock = key
+    # Find value reprenting minimum y distance between top of block and player
+    if distanceList == []:
+        return app.height
+    else:
+        minDistance = min(distanceList)
 
-    #Finds block with minimum y distance between top of block and player
-    minval = min(d.values())
-    groundBlock = None
-    for key in d:
-        if d[key] == minval:
-            groundBlock = key
-    
+    #find index of minimum distance value
+    index = distanceList.index(minDistance)
+
+    #find corresponding block
+    groundBlock = sameXAsPlayer[index]
+
+    # WORKS
+    # for block in chunk:
+    #     if groundBlock == block:
+    #         block.color = 'pink'
     #returns the top left of position of this block to be player's groundheight
-    groundHeight = groundBlock.posyTL
-    return groundHeight
+    return groundBlock.posyTL
+
+    # groundHeight = groundBlock.posyTL
+    # return groundHeight
 

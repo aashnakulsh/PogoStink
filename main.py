@@ -6,11 +6,12 @@ from charactersetup import *
 from PIL import Image, ImageDraw
 def onAppStart(app):
     app.gravity = 1
+    # app.chunk = generateLevel(defaultChunk)
     app.chunk = generateLevel(defaultChunk)
     app.chunkCollidable = getCollidableBlocks(app.chunk)
     app.player = Player(100, 100)
     app.player = Player(200, 100)
-    app.stepsPerSecond = 30
+    app.stepsPerSecond = 60
     app.offset = 0
 
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
@@ -18,6 +19,7 @@ def game_redrawAll(app):
     app.player.draw()
     generateChunk(app.chunk)
     drawLine(0, app.groundHeight, app.width, app.groundHeight, fill = 'red')
+    
 def game_onKeyPress(app, key):
     if key == 'w':
         setActiveScreen('welcome')
