@@ -32,6 +32,15 @@ class Fireball:
         self.targetY = targetY
         self.fireballSpeed = 8
 
+        #POSITIONS
+        self.posxTL, self.posyTL = self.x, self.y                 #Top Left
+        self.posxTR, self.posyTR = (self.x + self.fireballSize,   #Top Left
+                                    self.y)
+        self.posxTR, self.posyTR = (self.x,                         
+                                    self.y + self.fireballSize)   #Top Left
+        self.posxBR, self.posyBR = (self.x + self.fireballSize, 
+                                    self.y + self.fireballSize)   #Bottom Right
+
         # Calculate direction towards the target
         deltaX = targetX - self.x
         deltaY = targetY - self.y
@@ -49,3 +58,14 @@ class Fireball:
     def draw(self):
         # Draws fireballs
         drawRect(self.x, self.y, self.fireballSize, self.fireballSize, fill = 'orange')
+
+def isBasicCollision(rect1x, rect1y, rect1width, rect1height, rect2x, rect2y, rect2width, rect2height):
+    if(
+        rect1x < rect2x + rect2width and
+        rect1x + rect1width > rect2x and
+        rect1y < rect2y + rect2height and
+        rect1y + rect1height > rect2y
+    ):
+        return True
+    else:
+        return False

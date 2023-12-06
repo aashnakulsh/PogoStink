@@ -67,7 +67,7 @@ class Player():
 
         for block in app.chunkCollidable:
             #stores what side of block the collision occured
-            sidesCollided = isCollided(self, block)
+            sidesCollided = isBlockCollided(self, block)
 
             # If player collides with TOP of block
             if (sidesCollided["top"]):
@@ -132,7 +132,6 @@ class Player():
 
         #update player corner coordinates (positions)
         self.updatePlayerPositions()
-
         
     # Update player appearance based on angle input
     def rotate(self, deg):
@@ -145,7 +144,7 @@ class Player():
 # Modified from CS Academy: 3.3.5 Intersections (Rectangle-Rectangle)
 # Checks if two objects (player and block) have intersected or 'collided'
 # Returns the side on which the collision happened for obj2
-def isCollided(obj1, obj2):
+def isBlockCollided(obj1, obj2):
     collisionSides = {"top": False, "bottom": False, "left": False, 
                       "right": False}
     if ((obj1.posxBR >= obj2.posxTL) and (obj2.posxBR >= obj1.posxTL) and
