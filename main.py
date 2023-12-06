@@ -51,7 +51,7 @@ def resetGame(app):
 #~~~~~~~~~~~~~~~~GAME SCREEN~~~~~~~~~~~~~~~~
 def game_onAppStart(app):
     # BACKGROUND/IMAGES
-    app.backgroundImage = CMUImage(Image.open("images/skybackground.jpeg"))
+    app.backgroundImage = CMUImage(Image.open("assets/skybackground.jpeg"))
 
     # INITIALIZE VARIABLES
     app.gravity = 1
