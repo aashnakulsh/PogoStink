@@ -337,5 +337,5 @@ def gameOverLose_onMousePress(app, mx, my):
         setActiveScreen('game')
         resetGame(app)
 
-runAppWithScreens(width = app.width, height = app.height, initialScreen='help')
+runAppWithScreens(width = app.width, height = app.height, initialScreen='welcome')
 
