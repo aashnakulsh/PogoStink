@@ -23,7 +23,7 @@ Shortcut Commands:
 - these two shortcuts allow testers to easily see the random level generation
     aspect of Pogostink and try playing with different monsters/powerups.
 
-PLEASE NOTE using images in generation may cause performane issues. If it is the 
+PLEASE NOTE using images in generation may cause performance issues. If it is the 
 case, please comment out lines 103-108. Then, all the blocks will merely be 
 'colors' instead of images. 
 
